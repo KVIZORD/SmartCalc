@@ -33,6 +33,8 @@ public:
       {"X", {TokenType::VARIABLE, "X", -1}},
       {"(", {TokenType::OPEN_BRACKET, "(", -1}},
       {")", {TokenType::CLOSE_BRACKET, ")", -1}},
+      {"e", {TokenType::OPERATOR, "e", 1}},
+      {"E", {TokenType::OPERATOR, "E", 1}},
       {"+", {TokenType::OPERATOR, "+", 1}},
       {"-", {TokenType::OPERATOR, "-", 1}},
       {"*", {TokenType::OPERATOR, "*", 2}},
@@ -49,11 +51,15 @@ public:
       {"ln", {TokenType::FUNCTION, "ln", 3}},
       {"log", {TokenType::FUNCTION, "log", 3}}};
 
-  std::vector<Token> TokenizeExpression(const std::string &expression);
-  double CalculateExpression(const std::vector<Token> &tokens);
+  double Calculate(const std::string expression);
 
 private:
+  std::vector<Token> TokenizeExpression(const std::string &expression);
   void CheckTokensValidity(const std::vector<Token> &tokens);
+  std::vector<Token>
+  ConvertTokensToPolishNotation(const std::vector<Token> &tokens);
+  double Execute(std::string oper, double first, double second);
+  double Execute(std::string func, double value);
 };
 
 } // namespace s21

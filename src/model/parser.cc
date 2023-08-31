@@ -1,4 +1,5 @@
 #include "parser.h"
+#include <cmath>
 #include <iostream>
 #include <stack>
 #include <string>
@@ -18,6 +19,7 @@ Calculator::TokenizeExpression(const std::string &expression) {
   for (size_t i = 0; i < expression.size(); ++i) {
     char current_sym = expression[i];
     char next_sym = (i != expression.size() - 1) ? expression[i + 1] : '\0';
+    char prev_sym = (i != 0) ? expression[i - 1] : '\0';
 
     if (isspace(current_sym)) {
       continue;
@@ -33,7 +35,12 @@ Calculator::TokenizeExpression(const std::string &expression) {
       }
     } else if (isalpha(current_sym)) {
       if (i == expression.size() - 1 || !isalpha(next_sym)) {
-        if (kTokens.count(token)) {
+        if (token == "e" || token == "E") {
+          tokens.push_back(kTokens.at("*"));
+          tokens.push_back({TokenType::NUMBER, "10", -1});
+          tokens.push_back(kTokens.at("^"));
+          token.clear();
+        } else if (kTokens.count(token)) {
           tokens.push_back(kTokens.at(token));
         } else if (kTokens.count(token)) {
           tokens.push_back(kTokens.at(token));
@@ -43,6 +50,14 @@ Calculator::TokenizeExpression(const std::string &expression) {
         token.clear();
       }
     } else if (ispunct(current_sym)) {
+      if (current_sym == '-' || current_sym == '+') {
+        if (i == 0 || prev_sym == '(') {
+          tokens.push_back({TokenType::NUMBER, "0", -1});
+          tokens.push_back(kTokens.at(token));
+          token.clear();
+          continue;
+        }
+      }
       if (kTokens.count(token)) {
         tokens.push_back(kTokens.at(token));
       } else {
@@ -58,45 +73,101 @@ Calculator::TokenizeExpression(const std::string &expression) {
   return tokens;
 }
 
-double Calculator::CalculateExpression(const std::vector<Token> &tokens) {
-  std::string out;
-  std::stack<Token> stc;
+std::vector<Token>
+Calculator::ConvertTokensToPolishNotation(const std::vector<Token> &tokens) {
+  std::vector<Token> polish_notation;
+  std::stack<Token> stack_tokens;
 
   for (const Token &token : tokens) {
-    if (token.type == TokenType::NUMBER) {
-      out += token.value;
-    } else if (token.type == TokenType::FUNCTION ||
-               token.type == TokenType::OPEN_BRACKET) {
-      stc.push(token);
+    if (token.type == TokenType::NUMBER || token.type == TokenType::FUNCTION) {
+      polish_notation.push_back(token);
+    } else if (token.type == TokenType::OPEN_BRACKET) {
+      stack_tokens.push(token);
     } else if (token.type == TokenType::OPERATOR) {
-      while (!stc.empty() && stc.top().type == TokenType::OPERATOR &&
-             stc.top().priority > token.priority) {
-        out += stc.top().value;
-        stc.pop();
+      while (!stack_tokens.empty() &&
+             stack_tokens.top().type == TokenType::OPERATOR &&
+             stack_tokens.top().priority > token.priority) {
+        polish_notation.push_back(stack_tokens.top());
+        stack_tokens.pop();
       }
-      stc.push(token);
+      stack_tokens.push(token);
     } else if (token.type == TokenType::CLOSE_BRACKET) {
-      while (!stc.empty() && stc.top().type != TokenType::OPEN_BRACKET) {
-        out += stc.top().value;
-        stc.pop();
+      while (!stack_tokens.empty() &&
+             stack_tokens.top().type != TokenType::OPEN_BRACKET) {
+        polish_notation.push_back(stack_tokens.top());
+        stack_tokens.pop();
       }
-      if (!stc.empty() && stc.top().type == TokenType::FUNCTION) {
-        out += stc.top().value;
-        stc.pop();
+      if (!stack_tokens.empty() &&
+          stack_tokens.top().type == TokenType::OPEN_BRACKET) {
+        stack_tokens.pop();
       }
-      if (!stc.empty() && stc.top().type == TokenType::OPEN_BRACKET) {
-        stc.pop();
+      if (!stack_tokens.empty() &&
+          stack_tokens.top().type == TokenType::FUNCTION) {
+        polish_notation.push_back(stack_tokens.top());
+        stack_tokens.pop();
       }
     }
   }
 
-  while (!stc.empty()) {
-    out += stc.top().value;
-    stc.pop();
+  while (!stack_tokens.empty()) {
+    polish_notation.push_back(stack_tokens.top());
+    stack_tokens.pop();
   }
 
-  std::cout << out;
+  return polish_notation;
+}
+
+double Calculator::Execute(std::string oper, double first, double second) {
+  if (oper == "+") {
+    return second + first;
+  } else if (oper == "-") {
+    return second - first;
+  } else if (oper == "*") {
+    return second * first;
+  } else if (oper == "/") {
+    return second / first;
+  } else if (oper == "mod") {
+    return fmod(second, first);
+  }
   return 0;
+}
+
+double Calculator::Execute(std::string func, double value) {
+  if (func == "sin") {
+    return sin(value);
+  } else if (func == "cos") {
+    return cos(value);
+  } else if (func == "tan") {
+    return tan(value);
+  }
+  return 0;
+}
+
+double Calculator::Calculate(const std::string expression) {
+  std::vector<Token> tokens = TokenizeExpression(expression);
+  std::vector<Token> polish = ConvertTokensToPolishNotation(tokens);
+  std::stack<double> stack;
+
+  for (auto token : polish) {
+    if (token.type == TokenType::NUMBER) {
+      stack.push(std::stod(token.value));
+    } else if (token.type == TokenType::OPERATOR) {
+      double first = stack.top();
+      stack.pop();
+      double second = stack.top();
+      stack.pop();
+
+      double res = Execute(token.value, first, second);
+      stack.push(res);
+    } else if (token.type == TokenType::FUNCTION) {
+      double value = stack.top();
+      double res = Execute(token.value, value);
+      stack.pop();
+      stack.push(res);
+    }
+  }
+  std::cout << stack.top() << std::endl;
+  return stack.top();
 }
 
 } // namespace s21
@@ -106,12 +177,7 @@ int main() {
   using namespace s21;
 
   Calculator a;
-  auto temp = a.TokenizeExpression("2 + 3 - sin(x) * 432 + e3");
-  for (auto i : temp) {
-    cout << i.value << endl;
-  }
-
-  a.CalculateExpression(temp);
+  a.Calculate("2-2-5");
 
   return 0;
 }
