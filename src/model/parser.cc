@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <algorithm>
 
 namespace s21 {
 
@@ -19,7 +20,6 @@ Calculator::TokenizeExpression(const std::string &expression) {
   for (size_t i = 0; i < expression.size(); ++i) {
     char current_sym = expression[i];
     char next_sym = (i != expression.size() - 1) ? expression[i + 1] : '\0';
-    char prev_sym = (i != 0) ? expression[i - 1] : '\0';
 
     if (isspace(current_sym)) {
       continue;
@@ -28,30 +28,26 @@ Calculator::TokenizeExpression(const std::string &expression) {
     token += current_sym;
 
     if (isdigit(current_sym) || current_sym == '.') {
-      if (i == expression.size() - 1 ||
-          (!isdigit(next_sym) && next_sym != '.')) {
+      if (!isdigit(next_sym) && next_sym != '.') {
         tokens.push_back({TokenType::NUMBER, token, -1});
         token.clear();
       }
     } else if (isalpha(current_sym)) {
-      if (i == expression.size() - 1 || !isalpha(next_sym)) {
+      if (!isalpha(next_sym)) {
         if (token == "e" || token == "E") {
           tokens.push_back(kTokens.at("*"));
           tokens.push_back({TokenType::NUMBER, "10", -1});
           tokens.push_back(kTokens.at("^"));
-          token.clear();
-        } else if (kTokens.count(token)) {
-          tokens.push_back(kTokens.at(token));
         } else if (kTokens.count(token)) {
           tokens.push_back(kTokens.at(token));
         } else {
-          tokens.push_back(kTokens.at(token));
+          tokens.push_back({TokenType::UNKNOWN, token, -1});
         }
         token.clear();
       }
     } else if (ispunct(current_sym)) {
       if ((current_sym == '-' || current_sym == '+') &&
-          (i == 0 || prev_sym == '(')) {
+          (i == 0 || expression[i - 1] == '(')) {
         tokens.push_back({TokenType::NUMBER, "0", -1});
         tokens.push_back(kTokens.at(token));
         token.clear();
@@ -78,7 +74,13 @@ Calculator::ConvertTokensToPolishNotation(const std::vector<Token> &tokens) {
   std::stack<Token> stack_tokens;
 
   for (const Token &token : tokens) {
+    if (token.type == TokenType::UNKNOWN) {
+      throw std::invalid_argument("Unknown token");
+    }
     if (token.type == TokenType::NUMBER) {
+      if (std::count(token.value.begin(), token.value.end(), '.') > 1) {
+        throw std::invalid_argument("Unknown token");
+      }
       polish_notation.push_back(token);
     } else if (token.type == TokenType::OPEN_BRACKET ||
                token.type == TokenType::FUNCTION) {
@@ -109,10 +111,13 @@ Calculator::ConvertTokensToPolishNotation(const std::vector<Token> &tokens) {
   }
 
   while (!stack_tokens.empty()) {
+    if (stack_tokens.top().type != TokenType::CLOSE_BRACKET ||
+        stack_tokens.top().type != TokenType::OPEN_BRACKET) {
+      throw std::invalid_argument("Unknown token");
+    }
     polish_notation.push_back(stack_tokens.top());
     stack_tokens.pop();
   }
-  
   return polish_notation;
 }
 
@@ -157,6 +162,9 @@ double Calculator::Execute(std::string func, double value) {
 }
 
 double Calculator::Calculate(const std::string expression) {
+  if (expression.empty()) {
+    return 0;
+  }
   std::vector<Token> tokens = TokenizeExpression(expression);
   std::vector<Token> polish = ConvertTokensToPolishNotation(tokens);
   std::stack<double> stack;
@@ -179,7 +187,7 @@ double Calculator::Calculate(const std::string expression) {
       stack.push(res);
     }
   }
-  std::cout << stack.top() << std::endl;
+
   return stack.top();
 }
 
@@ -190,7 +198,7 @@ int main() {
   using namespace s21;
 
   Calculator a;
-  a.Calculate("2+(3-6+(8-65*98)-6)");
+  std::cout << a.Calculate("3 + 2");
 
   return 0;
 }
