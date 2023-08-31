@@ -50,13 +50,12 @@ Calculator::TokenizeExpression(const std::string &expression) {
         token.clear();
       }
     } else if (ispunct(current_sym)) {
-      if (current_sym == '-' || current_sym == '+') {
-        if (i == 0 || prev_sym == '(') {
-          tokens.push_back({TokenType::NUMBER, "0", -1});
-          tokens.push_back(kTokens.at(token));
-          token.clear();
-          continue;
-        }
+      if ((current_sym == '-' || current_sym == '+') &&
+          (i == 0 || prev_sym == '(')) {
+        tokens.push_back({TokenType::NUMBER, "0", -1});
+        tokens.push_back(kTokens.at(token));
+        token.clear();
+        continue;
       }
       if (kTokens.count(token)) {
         tokens.push_back(kTokens.at(token));
@@ -79,14 +78,15 @@ Calculator::ConvertTokensToPolishNotation(const std::vector<Token> &tokens) {
   std::stack<Token> stack_tokens;
 
   for (const Token &token : tokens) {
-    if (token.type == TokenType::NUMBER || token.type == TokenType::FUNCTION) {
+    if (token.type == TokenType::NUMBER) {
       polish_notation.push_back(token);
-    } else if (token.type == TokenType::OPEN_BRACKET) {
+    } else if (token.type == TokenType::OPEN_BRACKET ||
+               token.type == TokenType::FUNCTION) {
       stack_tokens.push(token);
     } else if (token.type == TokenType::OPERATOR) {
       while (!stack_tokens.empty() &&
              stack_tokens.top().type == TokenType::OPERATOR &&
-             stack_tokens.top().priority > token.priority) {
+             stack_tokens.top().priority >= token.priority) {
         polish_notation.push_back(stack_tokens.top());
         stack_tokens.pop();
       }
@@ -97,8 +97,7 @@ Calculator::ConvertTokensToPolishNotation(const std::vector<Token> &tokens) {
         polish_notation.push_back(stack_tokens.top());
         stack_tokens.pop();
       }
-      if (!stack_tokens.empty() &&
-          stack_tokens.top().type == TokenType::OPEN_BRACKET) {
+      if (!stack_tokens.empty()) {
         stack_tokens.pop();
       }
       if (!stack_tokens.empty() &&
@@ -113,7 +112,7 @@ Calculator::ConvertTokensToPolishNotation(const std::vector<Token> &tokens) {
     polish_notation.push_back(stack_tokens.top());
     stack_tokens.pop();
   }
-
+  
   return polish_notation;
 }
 
@@ -126,6 +125,8 @@ double Calculator::Execute(std::string oper, double first, double second) {
     return second * first;
   } else if (oper == "/") {
     return second / first;
+  } else if (oper == "^") {
+    return powf(second, first);
   } else if (oper == "mod") {
     return fmod(second, first);
   }
@@ -139,6 +140,18 @@ double Calculator::Execute(std::string func, double value) {
     return cos(value);
   } else if (func == "tan") {
     return tan(value);
+  } else if (func == "acos") {
+    return acos(value);
+  } else if (func == "asin") {
+    return asin(value);
+  } else if (func == "atan") {
+    return atan(value);
+  } else if (func == "sqrt") {
+    return sqrt(value);
+  } else if (func == "ln") {
+    return log(value);
+  } else if (func == "log") {
+    return log10(value);
   }
   return 0;
 }
@@ -177,7 +190,7 @@ int main() {
   using namespace s21;
 
   Calculator a;
-  a.Calculate("2-2-5");
+  a.Calculate("2+(3-6+(8-65*98)-6)");
 
   return 0;
 }
