@@ -2,26 +2,30 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui {
+class MainWindow;
+}
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
+class MainWindow : public QMainWindow {
+  Q_OBJECT
 
-public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+ public:
+  MainWindow(QWidget *parent = nullptr);
+  ~MainWindow();
 
-signals:
-    void num0ButtonSignal();
+  void AddTextFromButtonToExpression();
 
-private:
-    Ui::MainWindow *ui;
+  QString GetExpression();
+  void SetExpression(QString text);
+  void ClearExpression();
+  void RemoveLastSymFromExpression();
+	QPushButton* GetCalculateButton() const;
 
-private slots:
-    void slotButton();
+ public:
+  Ui::MainWindow *ui;
 };
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

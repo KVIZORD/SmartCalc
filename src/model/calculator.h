@@ -1,5 +1,5 @@
-#ifndef __SMARTCALC_V2_0_SRC_MODEL_PARSES_H__
-#define __SMARTCALC_V2_0_SRC_MODEL_PARSES_H__
+#ifndef __SMARTCALC_V2_0_SRC_MODEL_CALCULATOR_H__
+#define __SMARTCALC_V2_0_SRC_MODEL_CALCULATOR_H__
 
 #include <string>
 #include <unordered_map>
@@ -8,7 +8,7 @@
 namespace s21 {
 
 class Calculator {
-public:
+ public:
   enum class TokenType {
     NUMBER,
     VARIABLE,
@@ -51,16 +51,19 @@ public:
       {"ln", {TokenType::FUNCTION, "ln", 3}},
       {"log", {TokenType::FUNCTION, "log", 3}}};
 
+  const std::size_t kMaxExpressionLength = 255;
+
+ public:
   double Calculate(const std::string expression);
 
-private:
+ private:
   std::vector<Token> TokenizeExpression(const std::string &expression);
   void CheckTokensValidity(const std::vector<Token> &tokens);
-  std::vector<Token>
-  ConvertTokensToPolishNotation(const std::vector<Token> &tokens);
+  std::vector<Token> ConvertTokensToPolishNotation(
+      const std::vector<Token> &tokens);
   double Execute(std::string oper, double first, double second);
   double Execute(std::string func, double value);
 };
 
-} // namespace s21
-#endif // __SMARTCALC_V2_0_SRC_MODEL_PARSES_H__
+}  // namespace s21
+#endif  // __SMARTCALC_V2_0_SRC_MODEL_CALCULATOR_H__

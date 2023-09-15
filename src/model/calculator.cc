@@ -1,19 +1,20 @@
-#include "parser.h"
+#include "calculator.h"
+
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <stack>
 #include <string>
 #include <unordered_set>
 #include <vector>
-#include <algorithm>
 
 namespace s21 {
 
 using Token = Calculator::Token;
 using TokenType = Calculator::TokenType;
 
-std::vector<Token>
-Calculator::TokenizeExpression(const std::string &expression) {
+std::vector<Token> Calculator::TokenizeExpression(
+    const std::string &expression) {
   std::vector<Token> tokens;
   std::string token;
 
@@ -27,60 +28,76 @@ Calculator::TokenizeExpression(const std::string &expression) {
 
     token += current_sym;
 
-    if (isdigit(current_sym) || current_sym == '.') {
+    if ((current_sym == '-' || current_sym == '+') &&
+        (i == 0 || expression[i - 1] == '(')) {  // unary operators
+      tokens.push_back({TokenType::NUMBER, "0", -1});
+      tokens.push_back(kTokens.at(token));
+      token.clear();
+      continue;
+    } else if (token == "e" || token == "E") {  // science notation
+      tokens.push_back(kTokens.at("*"));
+      tokens.push_back({TokenType::NUMBER, "10", -1});
+      tokens.push_back(kTokens.at("^"));
+			token.clear();
+    } else if (isdigit(current_sym) || current_sym == '.') {
       if (!isdigit(next_sym) && next_sym != '.') {
         tokens.push_back({TokenType::NUMBER, token, -1});
         token.clear();
       }
-    } else if (isalpha(current_sym)) {
-      if (!isalpha(next_sym)) {
-        if (token == "e" || token == "E") {
-          tokens.push_back(kTokens.at("*"));
-          tokens.push_back({TokenType::NUMBER, "10", -1});
-          tokens.push_back(kTokens.at("^"));
-        } else if (kTokens.count(token)) {
-          tokens.push_back(kTokens.at(token));
-        } else {
-          tokens.push_back({TokenType::UNKNOWN, token, -1});
-        }
-        token.clear();
-      }
-    } else if (ispunct(current_sym)) {
-      if ((current_sym == '-' || current_sym == '+') &&
-          (i == 0 || expression[i - 1] == '(')) {
-        tokens.push_back({TokenType::NUMBER, "0", -1});
-        tokens.push_back(kTokens.at(token));
-        token.clear();
-        continue;
-      }
-      if (kTokens.count(token)) {
-        tokens.push_back(kTokens.at(token));
-      } else {
-        tokens.push_back({TokenType::UNKNOWN, token, -1});
-      }
-      token.clear();
-    } else {
-      tokens.push_back({TokenType::UNKNOWN, token, -1});
+    } else if (kTokens.count(token)) {
+      tokens.push_back(kTokens.at(token));
       token.clear();
     }
+  }
+
+  if (!(token.empty())) {
+    tokens.push_back({TokenType::UNKNOWN, token, -1});
+  }
+
+  for (auto i : tokens) {
+    std::cout << i.value << std::endl;
   }
 
   return tokens;
 }
 
-std::vector<Token>
-Calculator::ConvertTokensToPolishNotation(const std::vector<Token> &tokens) {
+void Calculator::CheckTokensValidity(const std::vector<Token> &tokens) {
+  int brackets_counter = 0;
+  TokenType prev_type;
+
+  for (Token token : tokens) {
+    if (token.type == TokenType::NUMBER) {
+      int count = std::count_if(token.value.begin(), token.value.end(),
+                                [](char ch) { return ch == '.'; });
+      if (count > 1) {
+        throw std::invalid_argument("Unknown token");
+      }
+      std::stod(token.value);
+    } else if (token.type == TokenType::OPEN_BRACKET) {
+      brackets_counter++;
+    } else if (token.type == TokenType::CLOSE_BRACKET) {
+      brackets_counter--;
+    } else if (token.type == TokenType::UNKNOWN) {
+      throw std::invalid_argument("Unknown token");
+    } else if (prev_type == TokenType::OPERATOR && token.type == TokenType::OPERATOR){
+			// throw std::invalid_argument("Two operators in a row");
+		}
+
+    prev_type = token.type;
+  }
+
+  if (brackets_counter != 0) {
+    throw std::invalid_argument("Error brackets");
+  }
+}
+
+std::vector<Token> Calculator::ConvertTokensToPolishNotation(
+    const std::vector<Token> &tokens) {
   std::vector<Token> polish_notation;
   std::stack<Token> stack_tokens;
 
   for (const Token &token : tokens) {
-    if (token.type == TokenType::UNKNOWN) {
-      throw std::invalid_argument("Unknown token");
-    }
     if (token.type == TokenType::NUMBER) {
-      if (std::count(token.value.begin(), token.value.end(), '.') > 1) {
-        throw std::invalid_argument("Unknown token");
-      }
       polish_notation.push_back(token);
     } else if (token.type == TokenType::OPEN_BRACKET ||
                token.type == TokenType::FUNCTION) {
@@ -111,10 +128,6 @@ Calculator::ConvertTokensToPolishNotation(const std::vector<Token> &tokens) {
   }
 
   while (!stack_tokens.empty()) {
-    if (stack_tokens.top().type != TokenType::CLOSE_BRACKET ||
-        stack_tokens.top().type != TokenType::OPEN_BRACKET) {
-      throw std::invalid_argument("Unknown token");
-    }
     polish_notation.push_back(stack_tokens.top());
     stack_tokens.pop();
   }
@@ -165,7 +178,13 @@ double Calculator::Calculate(const std::string expression) {
   if (expression.empty()) {
     return 0;
   }
+  if (expression.length() > kMaxExpressionLength) {
+    throw std::invalid_argument("expression length more then 255");
+  }
+
   std::vector<Token> tokens = TokenizeExpression(expression);
+  CheckTokensValidity(tokens);
+
   std::vector<Token> polish = ConvertTokensToPolishNotation(tokens);
   std::stack<double> stack;
 
@@ -191,14 +210,18 @@ double Calculator::Calculate(const std::string expression) {
   return stack.top();
 }
 
-} // namespace s21
+}  // namespace s21
 
 int main() {
   using namespace std;
   using namespace s21;
 
   Calculator a;
-  std::cout << a.Calculate("3 + 2");
+  try {
+    std::cout << a.Calculate("5e+10");
+  } catch (const std::invalid_argument e) {
+    std::cout << "error";
+  }
 
   return 0;
 }

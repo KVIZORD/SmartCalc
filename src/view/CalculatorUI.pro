@@ -10,10 +10,14 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+		../controller/controller.cc \
+		../model/calculator.cc
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+		../controller/controller.h \
+		../model/calculator.h
 
 FORMS += \
     mainwindow.ui
