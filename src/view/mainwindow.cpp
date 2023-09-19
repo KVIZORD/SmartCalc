@@ -3,80 +3,80 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
-  ui->setupUi(this);
+    : QMainWindow(parent), ui_(new Ui::MainWindow) {
+  ui_->setupUi(this);
 
-  connect(ui->num0Button, &QPushButton::clicked, this,
+  connect(ui_->num0Button, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->num1Button, &QPushButton::clicked, this,
+  connect(ui_->num1Button, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->num2Button, &QPushButton::clicked, this,
+  connect(ui_->num2Button, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->num3Button, &QPushButton::clicked, this,
+  connect(ui_->num3Button, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->num4Button, &QPushButton::clicked, this,
+  connect(ui_->num4Button, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->num5Button, &QPushButton::clicked, this,
+  connect(ui_->num5Button, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->num6Button, &QPushButton::clicked, this,
+  connect(ui_->num6Button, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->num7Button, &QPushButton::clicked, this,
+  connect(ui_->num7Button, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->num8Button, &QPushButton::clicked, this,
+  connect(ui_->num8Button, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->num9Button, &QPushButton::clicked, this,
-          &MainWindow::AddTextFromButtonToExpression);
-
-  connect(ui->minusButton, &QPushButton::clicked, this,
-          &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->plusButton, &QPushButton::clicked, this,
-          &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->multiplyButton, &QPushButton::clicked, this,
-          &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->divideButton, &QPushButton::clicked, this,
+  connect(ui_->num9Button, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
 
-  connect(ui->closeBracketButton, &QPushButton::clicked, this,
+  connect(ui_->minusButton, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->openBracketButton, &QPushButton::clicked, this,
+  connect(ui_->plusButton, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->pointButton, &QPushButton::clicked, this,
+  connect(ui_->multiplyButton, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->expButton, &QPushButton::clicked, this,
-          &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->scienceNotationButton, &QPushButton::clicked, this,
-          &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->varXButton, &QPushButton::clicked, this,
+  connect(ui_->divideButton, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
 
-  connect(ui->funcAcosButton, &QPushButton::clicked, this,
+  connect(ui_->closeBracketButton, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->funcAtanButton, &QPushButton::clicked, this,
+  connect(ui_->openBracketButton, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->funcCosButton, &QPushButton::clicked, this,
+  connect(ui_->pointButton, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->funcLnButton, &QPushButton::clicked, this,
+  connect(ui_->expButton, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->funcLogButton, &QPushButton::clicked, this,
+  connect(ui_->scienceNotationButton, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->funcModButton, &QPushButton::clicked, this,
-          &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->funcSinButton, &QPushButton::clicked, this,
-          &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->funcSqrtButton, &QPushButton::clicked, this,
-          &MainWindow::AddTextFromButtonToExpression);
-  connect(ui->funcTanButton, &QPushButton::clicked, this,
+  connect(ui_->varXButton, &QPushButton::clicked, this,
           &MainWindow::AddTextFromButtonToExpression);
 
-  connect(ui->allClearButton, &QPushButton::clicked, this,
+  connect(ui_->funcAcosButton, &QPushButton::clicked, this,
+          &MainWindow::AddTextFromButtonToExpression);
+  connect(ui_->funcAtanButton, &QPushButton::clicked, this,
+          &MainWindow::AddTextFromButtonToExpression);
+  connect(ui_->funcCosButton, &QPushButton::clicked, this,
+          &MainWindow::AddTextFromButtonToExpression);
+  connect(ui_->funcLnButton, &QPushButton::clicked, this,
+          &MainWindow::AddTextFromButtonToExpression);
+  connect(ui_->funcLogButton, &QPushButton::clicked, this,
+          &MainWindow::AddTextFromButtonToExpression);
+  connect(ui_->funcModButton, &QPushButton::clicked, this,
+          &MainWindow::AddTextFromButtonToExpression);
+  connect(ui_->funcSinButton, &QPushButton::clicked, this,
+          &MainWindow::AddTextFromButtonToExpression);
+  connect(ui_->funcSqrtButton, &QPushButton::clicked, this,
+          &MainWindow::AddTextFromButtonToExpression);
+  connect(ui_->funcTanButton, &QPushButton::clicked, this,
+          &MainWindow::AddTextFromButtonToExpression);
+
+  connect(ui_->allClearButton, &QPushButton::clicked, this,
           &MainWindow::ClearExpression);
-  connect(ui->removeSymButton, &QPushButton::clicked, this,
+  connect(ui_->removeSymButton, &QPushButton::clicked, this,
           &MainWindow::RemoveLastSymFromExpression);
 }
 
-QString MainWindow::GetExpression() { return ui->expressionLabel->text(); }
+QString MainWindow::GetExpression() { return ui_->expressionLineEdit->text(); }
 void MainWindow::SetExpression(QString text) {
-  ui->expressionLabel->setText(text);
+  ui_->expressionLineEdit->setText(text);
 }
 void MainWindow::ClearExpression() { SetExpression(""); }
 void MainWindow::RemoveLastSymFromExpression() {
@@ -101,9 +101,31 @@ void MainWindow::AddTextFromButtonToExpression() {
 }
 
 QPushButton *MainWindow::GetCalculateButton() const {
-  return ui->calculateButton;
+  return ui_->calculateButton;
 }
 
-double MainWindow::GetVarXValue() const { return ui->varXDoubleSpin->value(); }
+double MainWindow::GetVarXValue() const { return ui_->varXDoubleSpin->value(); }
 
-MainWindow::~MainWindow() { delete ui; }
+std::list<std::string> MainWindow::GetHistoryExpressions() const {
+  return expressionHistory_;
+}
+
+void MainWindow::addToHistoryExpression(std::string expression) {
+  if (expressionHistory_.size() == kMaxHistorySize) {
+    expressionHistory_.pop_back();
+  }
+  expressionHistory_.push_front(expression);
+
+  updateHistoryExpressions();
+}
+
+void MainWindow::updateHistoryExpressions() {
+  QString history = "";
+  for (std::string i : expressionHistory_) {
+    history += QString::fromStdString(i + "\n");
+  }
+
+  ui_->historyTextEdit->setPlainText(history);
+}
+
+MainWindow::~MainWindow() { delete ui_; }

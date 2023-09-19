@@ -17,10 +17,12 @@ void Controller::Calculate() {
     result = std::numeric_limits<double>::quiet_NaN();
   }
 
+  view_->ClearExpression();
+
   if (std::isnan(result)) {
-    view_->SetExpression("Error");
+    view_->addToHistoryExpression("Error");
   } else {
-    view_->SetExpression(QString::number(result));
+    view_->addToHistoryExpression(expression + "=" + std::to_string(result));
   }
 }
 

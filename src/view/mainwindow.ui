@@ -392,18 +392,21 @@
            </widget>
           </item>
           <item row="0" column="0" colspan="7">
-           <layout class="QVBoxLayout" name="screenLayout">
+           <layout class="QVBoxLayout" name="screenLayout" stretch="0,2">
             <item>
-             <widget class="QLabel" name="historyLabel">
-              <property name="text">
-               <string/>
+             <widget class="QLineEdit" name="expressionLineEdit">
+              <property name="maxLength">
+               <number>255</number>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="expressionLabel">
-              <property name="text">
-               <string/>
+             <widget class="QPlainTextEdit" name="historyTextEdit">
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
              </widget>
             </item>

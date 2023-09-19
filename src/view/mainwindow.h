@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <list>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -14,6 +15,8 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
+  static const int kMaxHistorySize = 5;
+
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
@@ -23,10 +26,14 @@ class MainWindow : public QMainWindow {
   void SetExpression(QString text);
   void ClearExpression();
   void RemoveLastSymFromExpression();
-	QPushButton* GetCalculateButton() const;
-	double GetVarXValue() const;
+  QPushButton *GetCalculateButton() const;
+  double GetVarXValue() const;
+  std::list<std::string> GetHistoryExpressions() const;
+  void addToHistoryExpression(std::string expression);
 
- public:
-  Ui::MainWindow *ui;
+ private:
+  void updateHistoryExpressions();
+  std::list<std::string> expressionHistory_;
+  Ui::MainWindow *ui_;
 };
 #endif  // MAINWINDOW_H

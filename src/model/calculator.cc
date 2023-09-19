@@ -53,20 +53,17 @@ std::vector<Token> Calculator::TokenizeExpression(
     } else if (kTokens.count(token)) {
       tokens.push_back(kTokens.at(token));
       token.clear();
-    } else {
-			tokens.push_back({TokenType::UNKNOWN, token, -1});
-			token.clear();
-		}
+    } 
   }
 
-  // if (!(token.empty())) {
-  //   tokens.push_back({TokenType::UNKNOWN, token, -1});
-  // }
+  if (!(token.empty())) {
+    tokens.push_back({TokenType::UNKNOWN, token, -1});
+  }
 
-  // for (auto i : tokens) {
-  //   std::cout << i.value << std::endl;
-  // }
-  // std::cout << std::endl;
+  for (auto i : tokens) {
+    std::cout << i.value << std::endl;
+  }
+  std::cout << std::endl;
 
   return tokens;
 }
@@ -124,7 +121,7 @@ std::vector<Token> Calculator::ConvertTokensToPolishNotation(
         operatorStack.pop();
       }
       operatorStack.push(token);
-    } else if (token.type == TokenType::OPEN_BRACKET) {
+    } else if (token.type == TokenType::OPEN_BRACKET || token.type == TokenType::FUNCTION) {
       operatorStack.push(token);
     } else if (token.type == TokenType::CLOSE_BRACKET) {
       while (!operatorStack.empty() &&
@@ -144,10 +141,10 @@ std::vector<Token> Calculator::ConvertTokensToPolishNotation(
     operatorStack.pop();
   }
 
-  // for (auto i : output) {
-  //   std::cout << i.value << std::endl;
-  // }
-  // std::cout << std::endl;
+  for (auto i : output) {
+    std::cout << i.value << std::endl;
+  }
+  std::cout << std::endl;
 
   return output;
 }
@@ -253,11 +250,11 @@ double Calculator::Calculate(
 //   using namespace std;
 //   using namespace s21;
 
-// 	std::unordered_map<std::string, double> values = {{"y", 5}};
+// 	std::unordered_map<std::string, double> values = {{"x", 5}};
 
 //   Calculator a;
 //   try {
-//     std::cout << a.Calculate("hsin + 5", values);
+//     std::cout << a.Calculate("ln(1)", values);
 //   } catch (const std::invalid_argument e) {
 //     std::cout << "error" << e.what();
 //   }
