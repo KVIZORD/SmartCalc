@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <locale>
 #include <stack>
 #include <string>
 #include <unordered_set>
@@ -70,7 +71,7 @@ std::vector<Token> Calculator::TokenizeExpression(
 void Calculator::CheckTokensValidity(const std::vector<Token> &tokens) {
   int brackets_counter = 0;
   int operator_counter = 0;
-  TokenType prev_type;
+  Token previous_token({TokenType::UNKNOWN, "", -1});
 
   for (Token token : tokens) {
     if (token.type == TokenType::NUMBER) {
@@ -86,18 +87,17 @@ void Calculator::CheckTokensValidity(const std::vector<Token> &tokens) {
       brackets_counter--;
     } else if (token.type == TokenType::UNKNOWN) {
       throw std::invalid_argument("Unknown token");
-    } else {
-      if (prev_type == TokenType::OPERATOR) {
+    } else if (token.type == TokenType::OPERATOR) {
+      if (previous_token.type == TokenType::OPERATOR) {
         operator_counter++;
         if (operator_counter > 2) {
-          throw std::invalid_argument("More two operators in a row");
+          throw std::invalid_argument("More than two operators in a row");
         }
       } else {
-        operator_counter++;
+        operator_counter = 1;
       }
     }
-
-    prev_type = token.type;
+    previous_token = token;
   }
 
   if (brackets_counter != 0) {
@@ -144,6 +144,7 @@ std::vector<Token> Calculator::ConvertTokensToPolishNotation(
   // for (auto i : output) {
   //   std::cout << i.value << std::endl;
   // }
+  // std::cout << std::endl;
 
   return output;
 }
@@ -184,9 +185,9 @@ double Calculator::Execute(std::string func, double value) {
     return log(value);
   } else if (func == "log") {
     return log10(value);
-  } else if (func == "u+") {
+  } else if (func == kUnaryOperatorFlag + "+") {
     return value;
-  } else if (func == "u-") {
+  } else if (func == kUnaryOperatorFlag + "-") {
     return -value;
   }
   return 0;
@@ -208,21 +209,25 @@ double Calculator::Calculate(const std::string expression) {
 
   for (auto token : polish) {
     if (token.type == TokenType::NUMBER) {
+      std::locale::global(std::locale("C"));
+
       stack.push(std::stod(token.value));
     } else if (token.type == TokenType::OPERATOR) {
+      double first, second, res;
+
       if (token.value[0] == kUnaryOperatorFlag[0]) {
-        double first = stack.top();
+        first = stack.top();
         stack.pop();
 
-        double res = Execute(token.value, first);
+        res = Execute(token.value, first);
         stack.push(res);
       } else {
-        double first = stack.top();
+        first = stack.top();
         stack.pop();
-        double second = stack.top();
+        second = stack.top();
         stack.pop();
 
-        double res = Execute(token.value, first, second);
+        res = Execute(token.value, first, second);
         stack.push(res);
       }
     } else if (token.type == TokenType::FUNCTION) {
@@ -244,9 +249,9 @@ double Calculator::Calculate(const std::string expression) {
 
 //   Calculator a;
 //   try {
-//     std::cout << a.Calculate("10 - +43");
+//     std::cout << a.Calculate("");
 //   } catch (const std::invalid_argument e) {
-//     std::cout << "error";
+//     std::cout << "error" << e.what();
 //   }
 
 //   return 0;
