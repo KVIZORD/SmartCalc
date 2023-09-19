@@ -28,17 +28,22 @@ std::vector<Token> Calculator::TokenizeExpression(
 
     token += current_sym;
 
-    if ((current_sym == '-' || current_sym == '+') &&
-        (i == 0 || expression[i - 1] == '(')) {  // unary operators
-      tokens.push_back({TokenType::NUMBER, "0", -1});
-      tokens.push_back(kTokens.at(token));
-      token.clear();
-      continue;
+    if (current_sym == '-' || current_sym == '+') {
+      if ((i == 0 || expression[i - 1] == '(') ||
+          tokens.back().type == TokenType::OPERATOR) {
+        tokens.push_back(kTokens.at(kUnaryOperatorFlag + token));
+        token.clear();
+        continue;
+      } else {
+        tokens.push_back(kTokens.at(token));
+        token.clear();
+        continue;
+      }
     } else if (token == "e" || token == "E") {  // science notation
       tokens.push_back(kTokens.at("*"));
       tokens.push_back({TokenType::NUMBER, "10", -1});
       tokens.push_back(kTokens.at("^"));
-			token.clear();
+      token.clear();
     } else if (isdigit(current_sym) || current_sym == '.') {
       if (!isdigit(next_sym) && next_sym != '.') {
         tokens.push_back({TokenType::NUMBER, token, -1});
@@ -54,15 +59,17 @@ std::vector<Token> Calculator::TokenizeExpression(
     tokens.push_back({TokenType::UNKNOWN, token, -1});
   }
 
-  for (auto i : tokens) {
-    std::cout << i.value << std::endl;
-  }
+  // for (auto i : tokens) {
+  //   std::cout << i.value << std::endl;
+  // }
+  // std::cout << std::endl;
 
   return tokens;
 }
 
 void Calculator::CheckTokensValidity(const std::vector<Token> &tokens) {
   int brackets_counter = 0;
+  int operator_counter = 0;
   TokenType prev_type;
 
   for (Token token : tokens) {
@@ -79,9 +86,16 @@ void Calculator::CheckTokensValidity(const std::vector<Token> &tokens) {
       brackets_counter--;
     } else if (token.type == TokenType::UNKNOWN) {
       throw std::invalid_argument("Unknown token");
-    } else if (prev_type == TokenType::OPERATOR && token.type == TokenType::OPERATOR){
-			// throw std::invalid_argument("Two operators in a row");
-		}
+    } else {
+      if (prev_type == TokenType::OPERATOR) {
+        operator_counter++;
+        if (operator_counter > 2) {
+          throw std::invalid_argument("More two operators in a row");
+        }
+      } else {
+        operator_counter++;
+      }
+    }
 
     prev_type = token.type;
   }
@@ -93,45 +107,45 @@ void Calculator::CheckTokensValidity(const std::vector<Token> &tokens) {
 
 std::vector<Token> Calculator::ConvertTokensToPolishNotation(
     const std::vector<Token> &tokens) {
-  std::vector<Token> polish_notation;
-  std::stack<Token> stack_tokens;
+  std::vector<Token> output;
+  std::stack<Token> operatorStack;
 
   for (const Token &token : tokens) {
     if (token.type == TokenType::NUMBER) {
-      polish_notation.push_back(token);
-    } else if (token.type == TokenType::OPEN_BRACKET ||
-               token.type == TokenType::FUNCTION) {
-      stack_tokens.push(token);
+      output.push_back(token);
     } else if (token.type == TokenType::OPERATOR) {
-      while (!stack_tokens.empty() &&
-             stack_tokens.top().type == TokenType::OPERATOR &&
-             stack_tokens.top().priority >= token.priority) {
-        polish_notation.push_back(stack_tokens.top());
-        stack_tokens.pop();
+      while (!operatorStack.empty() &&
+             operatorStack.top().type == TokenType::OPERATOR &&
+             operatorStack.top().priority >= token.priority) {
+        output.push_back(operatorStack.top());
+        operatorStack.pop();
       }
-      stack_tokens.push(token);
+      operatorStack.push(token);
+    } else if (token.type == TokenType::OPEN_BRACKET) {
+      operatorStack.push(token);
     } else if (token.type == TokenType::CLOSE_BRACKET) {
-      while (!stack_tokens.empty() &&
-             stack_tokens.top().type != TokenType::OPEN_BRACKET) {
-        polish_notation.push_back(stack_tokens.top());
-        stack_tokens.pop();
+      while (!operatorStack.empty() &&
+             operatorStack.top().type != TokenType::OPEN_BRACKET) {
+        output.push_back(operatorStack.top());
+        operatorStack.pop();
       }
-      if (!stack_tokens.empty()) {
-        stack_tokens.pop();
-      }
-      if (!stack_tokens.empty() &&
-          stack_tokens.top().type == TokenType::FUNCTION) {
-        polish_notation.push_back(stack_tokens.top());
-        stack_tokens.pop();
+      if (!operatorStack.empty() &&
+          operatorStack.top().type == TokenType::OPEN_BRACKET) {
+        operatorStack.pop();
       }
     }
   }
 
-  while (!stack_tokens.empty()) {
-    polish_notation.push_back(stack_tokens.top());
-    stack_tokens.pop();
+  while (!operatorStack.empty()) {
+    output.push_back(operatorStack.top());
+    operatorStack.pop();
   }
-  return polish_notation;
+
+  // for (auto i : output) {
+  //   std::cout << i.value << std::endl;
+  // }
+
+  return output;
 }
 
 double Calculator::Execute(std::string oper, double first, double second) {
@@ -170,6 +184,10 @@ double Calculator::Execute(std::string func, double value) {
     return log(value);
   } else if (func == "log") {
     return log10(value);
+  } else if (func == "u+") {
+    return value;
+  } else if (func == "u-") {
+    return -value;
   }
   return 0;
 }
@@ -192,13 +210,21 @@ double Calculator::Calculate(const std::string expression) {
     if (token.type == TokenType::NUMBER) {
       stack.push(std::stod(token.value));
     } else if (token.type == TokenType::OPERATOR) {
-      double first = stack.top();
-      stack.pop();
-      double second = stack.top();
-      stack.pop();
+      if (token.value[0] == kUnaryOperatorFlag[0]) {
+        double first = stack.top();
+        stack.pop();
 
-      double res = Execute(token.value, first, second);
-      stack.push(res);
+        double res = Execute(token.value, first);
+        stack.push(res);
+      } else {
+        double first = stack.top();
+        stack.pop();
+        double second = stack.top();
+        stack.pop();
+
+        double res = Execute(token.value, first, second);
+        stack.push(res);
+      }
     } else if (token.type == TokenType::FUNCTION) {
       double value = stack.top();
       double res = Execute(token.value, value);
@@ -212,16 +238,16 @@ double Calculator::Calculate(const std::string expression) {
 
 }  // namespace s21
 
-int main() {
-  using namespace std;
-  using namespace s21;
+// int main() {
+//   using namespace std;
+//   using namespace s21;
 
-  Calculator a;
-  try {
-    std::cout << a.Calculate("5e+10");
-  } catch (const std::invalid_argument e) {
-    std::cout << "error";
-  }
+//   Calculator a;
+//   try {
+//     std::cout << a.Calculate("10 - +43");
+//   } catch (const std::invalid_argument e) {
+//     std::cout << "error";
+//   }
 
-  return 0;
-}
+//   return 0;
+// }

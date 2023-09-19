@@ -9,11 +9,15 @@ namespace s21 {
 
 class Calculator {
  public:
+  const std::size_t kMaxExpressionLength = 255;
+  const std::string kUnaryOperatorFlag = "U";
+
   enum class TokenType {
     NUMBER,
     VARIABLE,
     FUNCTION,
     OPERATOR,
+    UNARY_OPERATOR,
     OPEN_BRACKET,
     CLOSE_BRACKET,
     UNKNOWN
@@ -49,9 +53,12 @@ class Calculator {
       {"atan", {TokenType::FUNCTION, "atan", 3}},
       {"sqrt", {TokenType::FUNCTION, "sqrt", 3}},
       {"ln", {TokenType::FUNCTION, "ln", 3}},
-      {"log", {TokenType::FUNCTION, "log", 3}}};
-
-  const std::size_t kMaxExpressionLength = 255;
+      {"log", {TokenType::FUNCTION, "log", 3}},
+      {kUnaryOperatorFlag + "-",
+       {TokenType::OPERATOR, kUnaryOperatorFlag + "-", 4}},
+      {kUnaryOperatorFlag + "+",
+       {TokenType::OPERATOR, kUnaryOperatorFlag + "+", 4}},
+  };
 
  public:
   double Calculate(const std::string expression);

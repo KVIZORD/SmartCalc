@@ -1,6 +1,5 @@
 #include "controller.h"
 
-#include <QMainWindow>
 #include <cmath>
 
 namespace s21 {
