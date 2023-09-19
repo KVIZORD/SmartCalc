@@ -24,6 +24,7 @@ class MainWindow : public QMainWindow {
   void ClearExpression();
   void RemoveLastSymFromExpression();
 	QPushButton* GetCalculateButton() const;
+	double GetVarXValue() const;
 
  public:
   Ui::MainWindow *ui;

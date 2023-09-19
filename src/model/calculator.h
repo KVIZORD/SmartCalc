@@ -61,7 +61,9 @@ class Calculator {
   };
 
  public:
-  double Calculate(const std::string expression);
+  double Calculate(
+      const std::string expression,
+      const std::unordered_map<std::string, double> variable_values);
 
  private:
   std::vector<Token> TokenizeExpression(const std::string &expression);

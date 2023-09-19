@@ -53,12 +53,15 @@ std::vector<Token> Calculator::TokenizeExpression(
     } else if (kTokens.count(token)) {
       tokens.push_back(kTokens.at(token));
       token.clear();
-    }
+    } else {
+			tokens.push_back({TokenType::UNKNOWN, token, -1});
+			token.clear();
+		}
   }
 
-  if (!(token.empty())) {
-    tokens.push_back({TokenType::UNKNOWN, token, -1});
-  }
+  // if (!(token.empty())) {
+  //   tokens.push_back({TokenType::UNKNOWN, token, -1});
+  // }
 
   // for (auto i : tokens) {
   //   std::cout << i.value << std::endl;
@@ -111,7 +114,7 @@ std::vector<Token> Calculator::ConvertTokensToPolishNotation(
   std::stack<Token> operatorStack;
 
   for (const Token &token : tokens) {
-    if (token.type == TokenType::NUMBER) {
+    if (token.type == TokenType::NUMBER || token.type == TokenType::VARIABLE) {
       output.push_back(token);
     } else if (token.type == TokenType::OPERATOR) {
       while (!operatorStack.empty() &&
@@ -193,7 +196,9 @@ double Calculator::Execute(std::string func, double value) {
   return 0;
 }
 
-double Calculator::Calculate(const std::string expression) {
+double Calculator::Calculate(
+    const std::string expression,
+    const std::unordered_map<std::string, double> variable_values) {
   if (expression.empty()) {
     return 0;
   }
@@ -208,9 +213,10 @@ double Calculator::Calculate(const std::string expression) {
   std::stack<double> stack;
 
   for (auto token : polish) {
-    if (token.type == TokenType::NUMBER) {
+    if (token.type == TokenType::VARIABLE) {
+      stack.push(variable_values.at(token.value));
+    } else if (token.type == TokenType::NUMBER) {
       std::locale::global(std::locale("C"));
-
       stack.push(std::stod(token.value));
     } else if (token.type == TokenType::OPERATOR) {
       double first, second, res;
@@ -247,9 +253,11 @@ double Calculator::Calculate(const std::string expression) {
 //   using namespace std;
 //   using namespace s21;
 
+// 	std::unordered_map<std::string, double> values = {{"y", 5}};
+
 //   Calculator a;
 //   try {
-//     std::cout << a.Calculate("");
+//     std::cout << a.Calculate("hsin + 5", values);
 //   } catch (const std::invalid_argument e) {
 //     std::cout << "error" << e.what();
 //   }

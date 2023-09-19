@@ -104,4 +104,6 @@ QPushButton *MainWindow::GetCalculateButton() const {
   return ui->calculateButton;
 }
 
+double MainWindow::GetVarXValue() const { return ui->varXDoubleSpin->value(); }
+
 MainWindow::~MainWindow() { delete ui; }
