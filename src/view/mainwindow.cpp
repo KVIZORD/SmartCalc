@@ -110,7 +110,7 @@ std::list<std::string> MainWindow::GetHistoryExpressions() const {
   return expressionHistory_;
 }
 
-void MainWindow::addToHistoryExpression(std::string expression) {
+void MainWindow::addToHistoryExpressions(std::string expression) {
   if (expressionHistory_.size() == kMaxHistorySize) {
     expressionHistory_.pop_back();
   }
@@ -126,6 +126,10 @@ void MainWindow::updateHistoryExpressions() {
   }
 
   ui_->historyTextEdit->setPlainText(history);
+}
+
+void MainWindow::updateGraph(){
+	
 }
 
 MainWindow::~MainWindow() { delete ui_; }

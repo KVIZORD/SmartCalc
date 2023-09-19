@@ -15,8 +15,6 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
-  static const int kMaxHistorySize = 5;
-
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
@@ -29,10 +27,16 @@ class MainWindow : public QMainWindow {
   QPushButton *GetCalculateButton() const;
   double GetVarXValue() const;
   std::list<std::string> GetHistoryExpressions() const;
-  void addToHistoryExpression(std::string expression);
+  void addToHistoryExpressions(std::string expression);
 
  private:
   void updateHistoryExpressions();
+  void updateGraph();
+
+ public:
+  static const int kMaxHistorySize = 5;
+
+ private:
   std::list<std::string> expressionHistory_;
   Ui::MainWindow *ui_;
 };

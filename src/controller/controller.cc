@@ -20,9 +20,9 @@ void Controller::Calculate() {
   view_->ClearExpression();
 
   if (std::isnan(result)) {
-    view_->addToHistoryExpression("Error");
+    view_->addToHistoryExpressions("Error");
   } else {
-    view_->addToHistoryExpression(expression + "=" + std::to_string(result));
+    view_->addToHistoryExpressions(expression + "=" + std::to_string(result));
   }
 }
 

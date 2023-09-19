@@ -18,11 +18,11 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="mathCalcucator">
        <attribute name="title">
-        <string>Math calc</string>
+        <string>Math</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3" rowstretch="0">
         <item row="0" column="0">
@@ -505,10 +505,100 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="QWidget" name="graph">
        <attribute name="title">
-        <string>Tab 2</string>
+        <string>Graph</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0" columnstretch="0,1,0">
+        <item row="2" column="0">
+         <widget class="QLabel" name="xEndLabel">
+          <property name="text">
+           <string>X (end) = </string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="stepLabel">
+          <property name="text">
+           <string>Step</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="yBeginLabel">
+          <property name="text">
+           <string>Y (begin) = </string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QDoubleSpinBox" name="stepDoubleSpin"/>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QCustomPlot" name="graphWidget" native="true"/>
+        </item>
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="xEndDoubleSpin">
+          <property name="minimum">
+           <double>-1000000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>1000000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="yEndLabel">
+          <property name="text">
+           <string>Y (end) =</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="xBeginLabel">
+          <property name="text">
+           <string>X (begin) = </string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QDoubleSpinBox" name="yBeginDoubleSpin">
+          <property name="minimum">
+           <double>-1000000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>1000000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QDoubleSpinBox" name="xEndDoubleSpin_2">
+          <property name="minimum">
+           <double>-1000000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>1000000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QDoubleSpinBox" name="xBeginDoubleSpin">
+          <property name="minimum">
+           <double>-1000000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>1000000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2" rowspan="5">
+         <widget class="QPlainTextEdit" name="functionViewTextEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -516,6 +606,14 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
