@@ -1,9 +1,10 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef __SMARTCALC_V2_0_SRC_VIEW_MAINWINDOW_H__
+#define __SMARTCALC_V2_0_SRC_VIEW_MAINWINDOW_H__
 
 #include <QMainWindow>
 #include <QPushButton>
 #include <list>
+#include "graph.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,11 +28,11 @@ class MainWindow : public QMainWindow {
   QPushButton *GetCalculateButton() const;
   double GetVarXValue() const;
   std::list<std::string> GetHistoryExpressions() const;
-  void addToHistoryExpressions(std::string expression);
+  void AddToHistoryExpressions(std::string expression);
+	void ShowGraphWindow();
 
  private:
-  void updateHistoryExpressions();
-  void updateGraph();
+  void UpdateHistoryExpressions();
 
  public:
   static const int kMaxHistorySize = 5;
@@ -39,5 +40,6 @@ class MainWindow : public QMainWindow {
  private:
   std::list<std::string> expressionHistory_;
   Ui::MainWindow *ui_;
+	Graph graph_;
 };
-#endif  // MAINWINDOW_H
+#endif  // __SMARTCALC_V2_0_SRC_VIEW_MAINWINDOW_H__

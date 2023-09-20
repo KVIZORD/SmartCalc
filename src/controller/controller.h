@@ -18,6 +18,7 @@ class Controller : public QObject {
             &Controller::Calculate);
   }
 
+  std::vector<double> CalculateGraphYValues();
   void Calculate();
 
  private:
