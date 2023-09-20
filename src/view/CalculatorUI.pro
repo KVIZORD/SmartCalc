@@ -16,15 +16,15 @@ SOURCES += \
 		../model/calculator.cc \
     qcustomplot.cc
 HEADERS += \
-    graph.h \
-    mainwindow.h \
+    include/graph.h \
+    include/mainwindow.h \
 		../controller/controller.h \
 		../model/calculator.h \
-    qcustomplot.h
+    include/qcustomplot.h
 
 FORMS += \
-    graph.ui \
-    mainwindow.ui
+    ui/graph.ui \
+    ui/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -5,20 +5,16 @@
 #include <QPushButton>
 
 #include "../model/calculator.h"
-#include "../view/mainwindow.h"
+#include "../view/include/mainwindow.h"
 
 namespace s21 {
 
 class Controller : public QObject {
   Q_OBJECT
  public:
-  Controller(MainWindow *view, Calculator *calculator)
-      : view_(view), calculator_(calculator) {
-    connect(view_->GetCalculateButton(), &QPushButton::clicked, this,
-            &Controller::Calculate);
-  }
+  Controller(MainWindow *view, Calculator *calculator);
 
-  std::vector<double> CalculateGraphYValues();
+  void CalculateGraphValues();
   void Calculate();
 
  private:

@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "include/mainwindow.h"
 
 #include "ui_mainwindow.h"
 
@@ -73,8 +73,8 @@ MainWindow::MainWindow(QWidget *parent)
   connect(ui_->removeSymButton, &QPushButton::clicked, this,
           &MainWindow::RemoveLastSymFromExpression);
 
-  connect(ui_->buildGraphButton, &QPushButton::clicked, this,
-          &MainWindow::ShowGraphWindow);
+  connect(ui_->buildGraphButton, &QPushButton::clicked, &graph_,
+          &Graph::UpdateGraphInformation);
 }
 
 QString MainWindow::GetExpression() { return ui_->expressionLineEdit->text(); }
@@ -105,6 +105,10 @@ void MainWindow::AddTextFromButtonToExpression() {
 
 QPushButton *MainWindow::GetCalculateButton() const {
   return ui_->calculateButton;
+}
+
+QPushButton *MainWindow::GetGraphButton() const {
+  return ui_->buildGraphButton;
 }
 
 double MainWindow::GetVarXValue() const { return ui_->varXDoubleSpin->value(); }
@@ -139,8 +143,9 @@ void MainWindow::UpdateHistoryExpressions() {
 //   graph_values_.y_end = ui_->yEndDoubleSpin->value();
 // }
 
-void MainWindow::ShowGraphWindow() { 
-	graph_.SetExpression(GetExpression().toStdString());
-	graph_.show(); }
+void MainWindow::ShowGraphWindow() {
+  graph_.SetExpression(GetExpression().toStdString());
+  graph_.show();
+}
 
 MainWindow::~MainWindow() { delete ui_; }

@@ -4,6 +4,30 @@
 
 namespace s21 {
 
+Controller::Controller(MainWindow *view, Calculator *calculator)
+    : view_(view), calculator_(calculator) {
+  connect(view_->GetCalculateButton(), &QPushButton::clicked, this,
+          &Controller::Calculate);
+  connect(view_->GetGraphButton(), &QPushButton::clicked, this,
+          &Controller::CalculateGraphValues);
+
+  connect(view_->graph_.GetXStartSpinBox(),
+          QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+          &Controller::CalculateGraphValues);
+  connect(view_->graph_.GetXEndSpinBox(),
+          QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+          &Controller::CalculateGraphValues);
+  connect(view_->graph_.GetYStartSpinBox(),
+          QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+          &Controller::CalculateGraphValues);
+  connect(view_->graph_.GetYEndSpinBox(),
+          QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+          &Controller::CalculateGraphValues);
+  connect(view_->graph_.GetStepSpinBox(),
+          QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+          &Controller::CalculateGraphValues);
+}
+
 void Controller::Calculate() {
   double result;
 
@@ -13,7 +37,7 @@ void Controller::Calculate() {
 
   try {
     result = calculator_->Calculate(expression, var_values);
-  } catch (const std::invalid_argument& e) {
+  } catch (const std::invalid_argument &e) {
     result = std::numeric_limits<double>::quiet_NaN();
   }
 
@@ -26,44 +50,22 @@ void Controller::Calculate() {
   }
 }
 
-// void Controller::UpdateGraph() {
-// 	double x_start = view_->GetGraphValues().x_start;
-// 	double x_end = view_->GetGraphValues().x_end;
-// 	double y_start = view_->GetGraphValues().y_start;
-// 	double y_end = view_->GetGraphValues().y_end;
+void Controller::CalculateGraphValues() {
+  // view_->graph_.ClearGraph();
 
-//   ui_->graphWidget->xAxis->setRange(x_start, x_end);
-//   ui_->graphWidget->yAxis->setRange(y_start, y_end);
+  double x_start = view_->graph_.GetXStart();
+  double x_end = view_->graph_.GetXEnd();
+  double step = view_->graph_.GetStep();
 
-// 	ui_->graphWidget->addGraph();
-// 	for (int i = x_start; i < x_end; i += step){
+  std::string expression = view_->GetExpression().toStdString();
 
-// 	ui_->graphWidget->graph(0)->addData(i, );
+  for (double i = x_start; i < x_end; i += step) {
+    std::unordered_map<std::string, double> var_values = {{"x", i}};
+    view_->graph_.AddPoint(i, calculator_->Calculate(expression, var_values));
+  }
 
-// 	}
-
-// 	ui_->graphWidget->replot();
-
-//   ui_->functionViewTextEdit->setPlainText(GetExpression());
-// }
-
-// std::vector<double> Controller::CalculateGraphYValues() {
-//   double x_start = view_->GetGraphValues().x_start;
-//   double x_end = view_->GetGraphValues().x_end;
-//   double y_start = view_->GetGraphValues().y_start;
-//   double y_end = view_->GetGraphValues().y_end;
-//   double step = view_->GetGraphValues().step;
-
-//   std::vector<double> y;
-
-//   std::string expression = view_->GetExpression().toStdString();
-
-//   for (int i = x_start; i < x_end; i += step) {
-//     std::unordered_map<std::string, double> var_values = {{"x", i}};
-//     y.push_back(calculator_->Calculate(expression, var_values));
-//   }
-
-//   return y;
-// }
+  view_->graph_.UpdateGraph();
+  view_->ShowGraphWindow();
+}
 
 }  // namespace s21

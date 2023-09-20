@@ -1,6 +1,6 @@
 #include <QApplication>
 
-#include "mainwindow.h"
+#include "include/mainwindow.h"
 #include "../controller/controller.h"
 #include "../model/calculator.h"
 

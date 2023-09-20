@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <list>
+
 #include "graph.h"
 
 QT_BEGIN_NAMESPACE
@@ -26,20 +27,21 @@ class MainWindow : public QMainWindow {
   void ClearExpression();
   void RemoveLastSymFromExpression();
   QPushButton *GetCalculateButton() const;
+  QPushButton *GetGraphButton() const;
   double GetVarXValue() const;
   std::list<std::string> GetHistoryExpressions() const;
   void AddToHistoryExpressions(std::string expression);
-	void ShowGraphWindow();
+  void ShowGraphWindow();
 
  private:
   void UpdateHistoryExpressions();
 
  public:
   static const int kMaxHistorySize = 5;
+  Graph graph_;
 
  private:
   std::list<std::string> expressionHistory_;
   Ui::MainWindow *ui_;
-	Graph graph_;
 };
 #endif  // __SMARTCALC_V2_0_SRC_VIEW_MAINWINDOW_H__

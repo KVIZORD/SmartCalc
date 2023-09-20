@@ -60,11 +60,6 @@ std::vector<Token> Calculator::TokenizeExpression(
     tokens.push_back({TokenType::UNKNOWN, token, -1});
   }
 
-  for (auto i : tokens) {
-    std::cout << i.value << std::endl;
-  }
-  std::cout << std::endl;
-
   return tokens;
 }
 
@@ -140,11 +135,6 @@ std::vector<Token> Calculator::ConvertTokensToPolishNotation(
     output.push_back(operatorStack.top());
     operatorStack.pop();
   }
-
-  for (auto i : output) {
-    std::cout << i.value << std::endl;
-  }
-  std::cout << std::endl;
 
   return output;
 }
