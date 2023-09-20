@@ -51,7 +51,7 @@ void Controller::Calculate() {
 }
 
 void Controller::CalculateGraphValues() {
-  // view_->graph_.ClearGraph();
+  view_->graph_.ClearGraph();
 
   double x_start = view_->graph_.GetXStart();
   double x_end = view_->graph_.GetXEnd();
@@ -59,7 +59,7 @@ void Controller::CalculateGraphValues() {
 
   std::string expression = view_->GetExpression().toStdString();
 
-  for (double i = x_start; i < x_end; i += step) {
+  for (double i = x_start; i <= x_end; i += step) {
     std::unordered_map<std::string, double> var_values = {{"x", i}};
     view_->graph_.AddPoint(i, calculator_->Calculate(expression, var_values));
   }

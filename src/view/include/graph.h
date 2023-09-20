@@ -12,11 +12,6 @@ class Graph;
 class Graph : public QWidget {
   Q_OBJECT
 
-  // struct Point {
-  //   double x;
-  //   double y;
-  // };
-
  public:
   explicit Graph(QWidget *parent = nullptr);
   void SetExpression(std::string expression);

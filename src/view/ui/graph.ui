@@ -20,7 +20,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="xStartLabel">
      <property name="text">
-      <string>X (start) = </string>
+      <string>X (min) = </string>
      </property>
     </widget>
    </item>
@@ -31,6 +31,9 @@
      </property>
      <property name="maximum">
       <double>1000000.000000000000000</double>
+     </property>
+     <property name="value">
+      <double>-10.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -44,7 +47,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="xEndLabel">
      <property name="text">
-      <string>X (end) = </string>
+      <string>X (max) = </string>
      </property>
     </widget>
    </item>
@@ -57,14 +60,14 @@
       <double>1000000.000000000000000</double>
      </property>
      <property name="value">
-      <double>5.000000000000000</double>
+      <double>10.000000000000000</double>
      </property>
     </widget>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="yStartLabel">
      <property name="text">
-      <string>Y (start = </string>
+      <string>Y (min) = </string>
      </property>
     </widget>
    </item>
@@ -76,12 +79,15 @@
      <property name="maximum">
       <double>1000000.000000000000000</double>
      </property>
+     <property name="value">
+      <double>-3.000000000000000</double>
+     </property>
     </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="yEndLabel">
      <property name="text">
-      <string>Y (end) =</string>
+      <string>Y (max) =</string>
      </property>
     </widget>
    </item>
@@ -94,21 +100,30 @@
       <double>1000000.000000000000000</double>
      </property>
      <property name="value">
-      <double>5.000000000000000</double>
+      <double>3.000000000000000</double>
      </property>
     </widget>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="stepLabel">
      <property name="text">
-      <string>Step</string>
+      <string>Step =</string>
      </property>
     </widget>
    </item>
    <item row="5" column="1">
     <widget class="QDoubleSpinBox" name="stepDoubleSpin">
+     <property name="decimals">
+      <number>6</number>
+     </property>
+     <property name="minimum">
+      <double>0.001000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>1000000.000000000000000</double>
+     </property>
      <property name="value">
-      <double>0.100000000000000</double>
+      <double>0.010000000000000</double>
      </property>
     </widget>
    </item>

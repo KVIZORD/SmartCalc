@@ -1,4 +1,7 @@
+
 #include "include/graph.h"
+
+#include <QDoubleSpinBox>
 
 #include "ui_graph.h"
 
@@ -7,19 +10,24 @@ Graph::Graph(QWidget *parent) : QWidget(parent), ui_(new Ui::Graph) {
 
   ui_->graphWidget->addGraph();
 
-  x_start_ = ui_->xStartDoubleSpin->value();
-  x_end_ = ui_->xEndDoubleSpin->value();
-  y_start_ = ui_->yStartDoubleSpin->value();
-  y_end_ = ui_->yEndDoubleSpin->value();
-  step_ = ui_->stepDoubleSpin->value();
+  connect(ui_->xStartDoubleSpin,
+          QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+          &Graph::UpdateGraphInformation);
+  connect(ui_->xEndDoubleSpin,
+          QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+          &Graph::UpdateGraphInformation);
+  connect(ui_->yStartDoubleSpin,
+          QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+          &Graph::UpdateGraphInformation);
+  connect(ui_->yEndDoubleSpin,
+          QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+          &Graph::UpdateGraphInformation);
+  connect(ui_->stepDoubleSpin,
+          QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
+          &Graph::UpdateGraphInformation);
 }
 
 Graph::~Graph() { delete ui_; }
-
-void Graph::SetExpression(std::string expression) {
-  expression_ = expression;
-  UpdateGraph();
-}
 
 void Graph::UpdateGraphInformation() {
   x_start_ = ui_->xStartDoubleSpin->value();
@@ -27,8 +35,6 @@ void Graph::UpdateGraphInformation() {
   y_start_ = ui_->yStartDoubleSpin->value();
   y_end_ = ui_->yEndDoubleSpin->value();
   step_ = ui_->stepDoubleSpin->value();
-
-	// expression_ = ui_->functionViewTextEdit->
 }
 
 void Graph::UpdateGraph() {
@@ -52,7 +58,6 @@ void Graph::AddPoint(double x, double y) {
 void Graph::ClearGraph() {
   x_.clear();
   y_.clear();
-  ui_->graphWidget->clearGraphs();
 }
 
 double Graph::GetXStart() { return x_start_; }

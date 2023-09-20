@@ -135,17 +135,6 @@ void MainWindow::UpdateHistoryExpressions() {
   ui_->historyTextEdit->setPlainText(history);
 }
 
-// void MainWindow::UpdateGraphInformation() {
-//   graph_values_.step = ui_->stepDoubleSpin->value();
-//   graph_values_.x_start = ui_->xStartDoubleSpin->value();
-//   graph_values_.x_end = ui_->xEndDoubleSpin->value();
-//   graph_values_.y_start = ui_->yStartDoubleSpin->value();
-//   graph_values_.y_end = ui_->yEndDoubleSpin->value();
-// }
-
-void MainWindow::ShowGraphWindow() {
-  graph_.SetExpression(GetExpression().toStdString());
-  graph_.show();
-}
+void MainWindow::ShowGraphWindow() { graph_.show(); }
 
 MainWindow::~MainWindow() { delete ui_; }
