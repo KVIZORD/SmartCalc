@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Graphic</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="3">
@@ -34,13 +34,6 @@
      </property>
      <property name="value">
       <double>-10.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2" rowspan="5">
-    <widget class="QPlainTextEdit" name="functionViewTextEdit">
-     <property name="readOnly">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -114,16 +107,26 @@
    <item row="5" column="1">
     <widget class="QDoubleSpinBox" name="stepDoubleSpin">
      <property name="decimals">
-      <number>6</number>
+      <number>5</number>
      </property>
      <property name="minimum">
-      <double>0.001000000000000</double>
+      <double>0.000010000000000</double>
      </property>
      <property name="maximum">
       <double>1000000.000000000000000</double>
      </property>
      <property name="value">
       <double>0.010000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QLineEdit" name="expressionLineEdit">
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

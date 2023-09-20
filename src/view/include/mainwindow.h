@@ -20,21 +20,20 @@ class MainWindow : public QMainWindow {
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
-  void AddTextFromButtonToExpression();
-
-  QString GetExpression();
-  void SetExpression(QString text);
-  void ClearExpression();
-  void RemoveLastSymFromExpression();
-  QPushButton *GetCalculateButton() const;
-  QPushButton *GetGraphButton() const;
-  double GetVarXValue() const;
-  std::list<std::string> GetHistoryExpressions() const;
-  void AddToHistoryExpressions(std::string expression);
-  void ShowGraphWindow();
+  void addToExpressionFromButton();
+  QString getCurrentExpression();
+  void setCurrentExpression(QString text);
+  void clearCurrentExpression();
+  void removeLastSymbolFromCurrentExpression();
+  QPushButton *getCalculateButton();
+  QPushButton *getGraphButton();
+  double getVariableXValue();
+  std::list<std::string> getExpressionHistory();
+  void addToExpressionHistory(std::string expression);
+  void showGraphPlotterWindow();
 
  private:
-  void UpdateHistoryExpressions();
+  void updateHistoryExpressions();
 
  public:
   static const int kMaxHistorySize = 5;

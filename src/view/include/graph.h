@@ -14,26 +14,28 @@ class Graph : public QWidget {
 
  public:
   explicit Graph(QWidget *parent = nullptr);
-  void SetExpression(std::string expression);
-  void ClearGraph();
-  std::string GetExpression();
-  void AddPoint(double x, double y);
-
-  double GetXStart();
-  double GetXEnd();
-  double GetyStart();
-  double GetyEnd();
-  double GetStep();
-
-  QDoubleSpinBox *GetXStartSpinBox() const;
-  QDoubleSpinBox *GetXEndSpinBox() const;
-  QDoubleSpinBox *GetYStartSpinBox() const;
-  QDoubleSpinBox *GetYEndSpinBox() const;
-  QDoubleSpinBox *GetStepSpinBox() const;
-
-  void UpdateGraphInformation();
-  void UpdateGraph();
   ~Graph();
+
+  void setExpression(std::string expression);
+  void clearGraph();
+  std::string getCurrentExpression();
+  void addPoint(double x, double y);
+
+  double getXStart();
+  double getXEnd();
+  double getyStart();
+  double getyEnd();
+  double getStep();
+
+  QDoubleSpinBox *getXStartSpinBox();
+  QDoubleSpinBox *getXEndSpinBox();
+  QDoubleSpinBox *getYStartSpinBox();
+  QDoubleSpinBox *getYEndSpinBox();
+  QDoubleSpinBox *getStepSpinBox();
+
+  void updateGraphInformation();
+  void updateGraph();
+  std::string expression_;
 
  private:
   double x_start_;
@@ -43,7 +45,6 @@ class Graph : public QWidget {
   double step_;
 
   Ui::Graph *ui_;
-  std::string expression_;
   std::vector<double> x_;
   std::vector<double> y_;
 };

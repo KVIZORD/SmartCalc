@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <iostream>
 #include <locale>
 #include <stack>
 #include <string>
@@ -14,7 +13,7 @@ namespace s21 {
 using Token = Calculator::Token;
 using TokenType = Calculator::TokenType;
 
-std::vector<Token> Calculator::TokenizeExpression(
+std::vector<Token> Calculator::tokenizeExpression(
     const std::string &expression) {
   std::vector<Token> tokens;
   std::string token;
@@ -31,29 +30,29 @@ std::vector<Token> Calculator::TokenizeExpression(
 
     if (current_sym == '-' || current_sym == '+') {
       if ((i == 0 || expression[i - 1] == '(') ||
-          tokens.back().type == TokenType::OPERATOR) {
-        tokens.push_back(kTokens.at(kUnaryOperatorFlag + token));
+          tokens.back().tokenType == TokenType::OPERATOR) {
+        tokens.push_back(kTokenMap.at(kUnaryOperatorFlag + token));
         token.clear();
         continue;
       } else {
-        tokens.push_back(kTokens.at(token));
+        tokens.push_back(kTokenMap.at(token));
         token.clear();
         continue;
       }
     } else if (token == "e" || token == "E") {  // science notation
-      tokens.push_back(kTokens.at("*"));
+      tokens.push_back(kTokenMap.at("*"));
       tokens.push_back({TokenType::NUMBER, "10", -1});
-      tokens.push_back(kTokens.at("^"));
+      tokens.push_back(kTokenMap.at("^"));
       token.clear();
     } else if (isdigit(current_sym) || current_sym == '.') {
       if (!isdigit(next_sym) && next_sym != '.') {
         tokens.push_back({TokenType::NUMBER, token, -1});
         token.clear();
       }
-    } else if (kTokens.count(token)) {
-      tokens.push_back(kTokens.at(token));
+    } else if (kTokenMap.count(token)) {
+      tokens.push_back(kTokenMap.at(token));
       token.clear();
-    } 
+    }
   }
 
   if (!(token.empty())) {
@@ -63,27 +62,27 @@ std::vector<Token> Calculator::TokenizeExpression(
   return tokens;
 }
 
-void Calculator::CheckTokensValidity(const std::vector<Token> &tokens) {
+void Calculator::checkTokensValidity(const std::vector<Token> &tokens) {
   int brackets_counter = 0;
   int operator_counter = 0;
   Token previous_token({TokenType::UNKNOWN, "", -1});
 
   for (Token token : tokens) {
-    if (token.type == TokenType::NUMBER) {
-      int count = std::count_if(token.value.begin(), token.value.end(),
+    if (token.tokenType == TokenType::NUMBER) {
+      int count = std::count_if(token.content.begin(), token.content.end(),
                                 [](char ch) { return ch == '.'; });
       if (count > 1) {
         throw std::invalid_argument("Unknown token");
       }
-      std::stod(token.value);
-    } else if (token.type == TokenType::OPEN_BRACKET) {
+      std::stod(token.content);
+    } else if (token.tokenType == TokenType::OPEN_BRACKET) {
       brackets_counter++;
-    } else if (token.type == TokenType::CLOSE_BRACKET) {
+    } else if (token.tokenType == TokenType::CLOSE_BRACKET) {
       brackets_counter--;
-    } else if (token.type == TokenType::UNKNOWN) {
+    } else if (token.tokenType == TokenType::UNKNOWN) {
       throw std::invalid_argument("Unknown token");
-    } else if (token.type == TokenType::OPERATOR) {
-      if (previous_token.type == TokenType::OPERATOR) {
+    } else if (token.tokenType == TokenType::OPERATOR) {
+      if (previous_token.tokenType == TokenType::OPERATOR) {
         operator_counter++;
         if (operator_counter > 2) {
           throw std::invalid_argument("More than two operators in a row");
@@ -100,33 +99,39 @@ void Calculator::CheckTokensValidity(const std::vector<Token> &tokens) {
   }
 }
 
-std::vector<Token> Calculator::ConvertTokensToPolishNotation(
+std::vector<Token> Calculator::convertTokensToPolishNotation(
     const std::vector<Token> &tokens) {
   std::vector<Token> output;
   std::stack<Token> operatorStack;
 
   for (const Token &token : tokens) {
-    if (token.type == TokenType::NUMBER || token.type == TokenType::VARIABLE) {
+    if (token.tokenType == TokenType::NUMBER || token.tokenType == TokenType::VARIABLE) {
       output.push_back(token);
-    } else if (token.type == TokenType::OPERATOR) {
+    } else if (token.tokenType == TokenType::FUNCTION ||
+               token.tokenType == TokenType::OPEN_BRACKET) {
+      operatorStack.push(token);
+    } else if (token.tokenType == TokenType::OPERATOR) {
       while (!operatorStack.empty() &&
-             operatorStack.top().type == TokenType::OPERATOR &&
-             operatorStack.top().priority >= token.priority) {
+             operatorStack.top().tokenType == TokenType::OPERATOR &&
+             token.precedence <= operatorStack.top().precedence) {
         output.push_back(operatorStack.top());
         operatorStack.pop();
       }
       operatorStack.push(token);
-    } else if (token.type == TokenType::OPEN_BRACKET || token.type == TokenType::FUNCTION) {
-      operatorStack.push(token);
-    } else if (token.type == TokenType::CLOSE_BRACKET) {
+    } else if (token.tokenType == TokenType::CLOSE_BRACKET) {
       while (!operatorStack.empty() &&
-             operatorStack.top().type != TokenType::OPEN_BRACKET) {
+             operatorStack.top().tokenType != TokenType::OPEN_BRACKET) {
         output.push_back(operatorStack.top());
         operatorStack.pop();
       }
       if (!operatorStack.empty() &&
-          operatorStack.top().type == TokenType::OPEN_BRACKET) {
+          operatorStack.top().tokenType == TokenType::OPEN_BRACKET) {
         operatorStack.pop();
+        if (!operatorStack.empty() &&
+            operatorStack.top().tokenType == TokenType::FUNCTION) {
+          output.push_back(operatorStack.top());
+          operatorStack.pop();
+        }
       }
     }
   }
@@ -139,7 +144,7 @@ std::vector<Token> Calculator::ConvertTokensToPolishNotation(
   return output;
 }
 
-double Calculator::Execute(std::string oper, double first, double second) {
+double Calculator::execute(std::string oper, double first, double second) {
   if (oper == "+") {
     return second + first;
   } else if (oper == "-") {
@@ -156,7 +161,7 @@ double Calculator::Execute(std::string oper, double first, double second) {
   return 0;
 }
 
-double Calculator::Execute(std::string func, double value) {
+double Calculator::execute(std::string func, double value) {
   if (func == "sin") {
     return sin(value);
   } else if (func == "cos") {
@@ -183,7 +188,7 @@ double Calculator::Execute(std::string func, double value) {
   return 0;
 }
 
-double Calculator::Calculate(
+double Calculator::calculate(
     const std::string expression,
     const std::unordered_map<std::string, double> variable_values) {
   if (expression.empty()) {
@@ -193,26 +198,26 @@ double Calculator::Calculate(
     throw std::invalid_argument("expression length more then 255");
   }
 
-  std::vector<Token> tokens = TokenizeExpression(expression);
-  CheckTokensValidity(tokens);
+  std::vector<Token> tokens = tokenizeExpression(expression);
+  checkTokensValidity(tokens);
 
-  std::vector<Token> polish = ConvertTokensToPolishNotation(tokens);
+  std::vector<Token> polish = convertTokensToPolishNotation(tokens);
   std::stack<double> stack;
 
   for (auto token : polish) {
-    if (token.type == TokenType::VARIABLE) {
-      stack.push(variable_values.at(token.value));
-    } else if (token.type == TokenType::NUMBER) {
+    if (token.tokenType == TokenType::VARIABLE) {
+      stack.push(variable_values.at(token.content));
+    } else if (token.tokenType == TokenType::NUMBER) {
       std::locale::global(std::locale("C"));
-      stack.push(std::stod(token.value));
-    } else if (token.type == TokenType::OPERATOR) {
+      stack.push(std::stod(token.content));
+    } else if (token.tokenType == TokenType::OPERATOR) {
       double first, second, res;
 
-      if (token.value[0] == kUnaryOperatorFlag[0]) {
+      if (token.content[0] == kUnaryOperatorFlag[0]) {
         first = stack.top();
         stack.pop();
 
-        res = Execute(token.value, first);
+        res = execute(token.content, first);
         stack.push(res);
       } else {
         first = stack.top();
@@ -220,12 +225,12 @@ double Calculator::Calculate(
         second = stack.top();
         stack.pop();
 
-        res = Execute(token.value, first, second);
+        res = execute(token.content, first, second);
         stack.push(res);
       }
-    } else if (token.type == TokenType::FUNCTION) {
+    } else if (token.tokenType == TokenType::FUNCTION) {
       double value = stack.top();
-      double res = Execute(token.value, value);
+      double res = execute(token.content, value);
       stack.pop();
       stack.push(res);
     }
@@ -240,11 +245,11 @@ double Calculator::Calculate(
 //   using namespace std;
 //   using namespace s21;
 
-// 	std::unordered_map<std::string, double> values = {{"x", 5}};
+//   std::unordered_map<std::string, double> values = {{"x", 5}};
 
 //   Calculator a;
 //   try {
-//     std::cout << a.Calculate("ln(1)", values);
+//     std::cout << a.Calculate("5 3", values);
 //   } catch (const std::invalid_argument e) {
 //     std::cout << "error" << e.what();
 //   }

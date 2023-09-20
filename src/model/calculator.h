@@ -17,22 +17,21 @@ class Calculator {
     VARIABLE,
     FUNCTION,
     OPERATOR,
-    UNARY_OPERATOR,
     OPEN_BRACKET,
     CLOSE_BRACKET,
     UNKNOWN
   };
 
   struct Token {
-    TokenType type;
-    std::string value;
-    int priority;
+    TokenType tokenType;
+    std::string content;
+    int precedence;
 
     Token(TokenType t, const std::string &v, int p)
-        : type(t), value(v), priority(p) {}
+        : tokenType(t), content(v), precedence(p) {}
   };
 
-  const std::unordered_map<std::string, Token> kTokens = {
+  const std::unordered_map<std::string, Token> kTokenMap = {
       {"x", {TokenType::VARIABLE, "x", -1}},
       {"X", {TokenType::VARIABLE, "X", -1}},
       {"(", {TokenType::OPEN_BRACKET, "(", -1}},
@@ -61,17 +60,17 @@ class Calculator {
   };
 
  public:
-  double Calculate(
+  double calculate(
       const std::string expression,
       const std::unordered_map<std::string, double> variable_values);
 
  private:
-  std::vector<Token> TokenizeExpression(const std::string &expression);
-  void CheckTokensValidity(const std::vector<Token> &tokens);
-  std::vector<Token> ConvertTokensToPolishNotation(
+  std::vector<Token> tokenizeExpression(const std::string &expression);
+  void checkTokensValidity(const std::vector<Token> &tokens);
+  std::vector<Token> convertTokensToPolishNotation(
       const std::vector<Token> &tokens);
-  double Execute(std::string oper, double first, double second);
-  double Execute(std::string func, double value);
+  double execute(std::string oper, double first, double second);
+  double execute(std::string func, double value);
 };
 
 }  // namespace s21

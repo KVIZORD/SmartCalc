@@ -6,66 +6,65 @@ namespace s21 {
 
 Controller::Controller(MainWindow *view, Calculator *calculator)
     : view_(view), calculator_(calculator) {
-  connect(view_->GetCalculateButton(), &QPushButton::clicked, this,
-          &Controller::Calculate);
-  connect(view_->GetGraphButton(), &QPushButton::clicked, this,
-          &Controller::CalculateGraphValues);
+  connect(view_->getCalculateButton(), &QPushButton::clicked, this,
+          &Controller::calculateMathExpression);
+  connect(view_->getGraphButton(), &QPushButton::clicked, this,
+          &Controller::calculateGraphValues);
 
-  connect(view_->graph_.GetXStartSpinBox(),
+  connect(view_->graph_.getXStartSpinBox(),
           QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
-          &Controller::CalculateGraphValues);
-  connect(view_->graph_.GetXEndSpinBox(),
+          &Controller::calculateGraphValues);
+  connect(view_->graph_.getXEndSpinBox(),
           QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
-          &Controller::CalculateGraphValues);
-  connect(view_->graph_.GetYStartSpinBox(),
+          &Controller::calculateGraphValues);
+  connect(view_->graph_.getYStartSpinBox(),
           QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
-          &Controller::CalculateGraphValues);
-  connect(view_->graph_.GetYEndSpinBox(),
+          &Controller::calculateGraphValues);
+  connect(view_->graph_.getYEndSpinBox(),
           QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
-          &Controller::CalculateGraphValues);
-  connect(view_->graph_.GetStepSpinBox(),
+          &Controller::calculateGraphValues);
+  connect(view_->graph_.getStepSpinBox(),
           QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
-          &Controller::CalculateGraphValues);
+          &Controller::calculateGraphValues);
 }
 
-void Controller::Calculate() {
+void Controller::calculateMathExpression() {
   double result;
 
-  double var_x = view_->GetVarXValue();
-  std::string expression = view_->GetExpression().toStdString();
+  double var_x = view_->getVariableXValue();
+  std::string expression = view_->getCurrentExpression().toStdString();
   std::unordered_map<std::string, double> var_values = {{"x", var_x}};
 
   try {
-    result = calculator_->Calculate(expression, var_values);
+    result = calculator_->calculate(expression, var_values);
   } catch (const std::invalid_argument &e) {
     result = std::numeric_limits<double>::quiet_NaN();
   }
 
-  view_->ClearExpression();
+  view_->clearCurrentExpression();
 
   if (std::isnan(result)) {
-    view_->AddToHistoryExpressions("Error");
+    view_->addToExpressionHistory("Error");
   } else {
-    view_->AddToHistoryExpressions(expression + "=" + std::to_string(result));
+    view_->addToExpressionHistory(expression + "=" + std::to_string(result));
   }
 }
 
-void Controller::CalculateGraphValues() {
-  view_->graph_.ClearGraph();
+void Controller::calculateGraphValues() {
+  view_->graph_.clearGraph();
 
-  double x_start = view_->graph_.GetXStart();
-  double x_end = view_->graph_.GetXEnd();
-  double step = view_->graph_.GetStep();
+  double x_start = view_->graph_.getXStart();
+  double x_end = view_->graph_.getXEnd();
+  double step = view_->graph_.getStep();
 
-  std::string expression = view_->GetExpression().toStdString();
+  std::string expression = view_->getCurrentExpression().toStdString();
 
   for (double i = x_start; i <= x_end; i += step) {
     std::unordered_map<std::string, double> var_values = {{"x", i}};
-    view_->graph_.AddPoint(i, calculator_->Calculate(expression, var_values));
+    view_->graph_.addPoint(i, calculator_->calculate(expression, var_values));
   }
 
-  view_->graph_.UpdateGraph();
-  view_->ShowGraphWindow();
+  view_->showGraphPlotterWindow();
 }
 
 }  // namespace s21

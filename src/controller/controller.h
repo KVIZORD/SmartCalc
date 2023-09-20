@@ -14,8 +14,9 @@ class Controller : public QObject {
  public:
   Controller(MainWindow *view, Calculator *calculator);
 
-  void CalculateGraphValues();
-  void Calculate();
+  public slots:
+  void calculateGraphValues();
+  void calculateMathExpression();
 
  private:
   MainWindow *view_;
@@ -24,4 +25,4 @@ class Controller : public QObject {
 
 }  // namespace s21
 
-#endif
+#endif  // __SMARTCALC_V2_0_SRC_CONTROLLER_CONTROLLER_H__
