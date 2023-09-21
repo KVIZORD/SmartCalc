@@ -73,11 +73,15 @@ MainWindow::MainWindow(QWidget *parent)
   connect(ui_->removeSymButton, &QPushButton::clicked, this,
           &MainWindow::removeLastSymbolFromCurrentExpression);
 
+	connect(ui_->buildGraphButton, &QPushButton::clicked, this,
+          &MainWindow::updateGraphExpression);
   connect(ui_->buildGraphButton, &QPushButton::clicked, &graph_,
           &Graph::updateGraphInformation);
 }
 
-QString MainWindow::getCurrentExpression() { return ui_->expressionLineEdit->text(); }
+QString MainWindow::getCurrentExpression() {
+  return ui_->expressionLineEdit->text();
+}
 void MainWindow::setCurrentExpression(QString text) {
   ui_->expressionLineEdit->setText(text);
 }
@@ -103,13 +107,9 @@ void MainWindow::addToExpressionFromButton() {
   }
 }
 
-QPushButton *MainWindow::getCalculateButton() {
-  return ui_->calculateButton;
-}
+QPushButton *MainWindow::getCalculateButton() { return ui_->calculateButton; }
 
-QPushButton *MainWindow::getGraphButton() {
-  return ui_->buildGraphButton;
-}
+QPushButton *MainWindow::getGraphButton() { return ui_->buildGraphButton; }
 
 double MainWindow::getVariableXValue() { return ui_->varXDoubleSpin->value(); }
 
@@ -135,9 +135,12 @@ void MainWindow::updateHistoryExpressions() {
   ui_->historyTextEdit->setPlainText(history);
 }
 
+void MainWindow::updateGraphExpression() {
+  graph_.setCurrentExpression(getCurrentExpression().toStdString());
+}
+
 void MainWindow::showGraphPlotterWindow() {
-  graph_.expression_ = getCurrentExpression().toStdString();
-	graph_.updateGraph();
+  graph_.updateGraph();
   graph_.show();
 }
 

@@ -9,6 +9,8 @@ Graph::Graph(QWidget *parent) : QWidget(parent), ui_(new Ui::Graph) {
   ui_->setupUi(this);
 
   ui_->graphWidget->addGraph();
+  ui_->graphWidget->xAxis->setLabel("x");
+  ui_->graphWidget->yAxis->setLabel("y");
 
   connect(ui_->xStartDoubleSpin,
           QOverload<double>::of(&QDoubleSpinBox::valueChanged), this,
@@ -67,6 +69,9 @@ double Graph::getyEnd() { return y_end_; }
 double Graph::getStep() { return step_; }
 
 std::string Graph::getCurrentExpression() { return expression_; }
+void Graph::setCurrentExpression(std::string expression) {
+  expression_ = expression;
+}
 
 QDoubleSpinBox *Graph::getXStartSpinBox() { return ui_->xStartDoubleSpin; }
 QDoubleSpinBox *Graph::getXEndSpinBox() { return ui_->xEndDoubleSpin; }

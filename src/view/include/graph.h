@@ -16,8 +16,8 @@ class Graph : public QWidget {
   explicit Graph(QWidget *parent = nullptr);
   ~Graph();
 
-  void setExpression(std::string expression);
   void clearGraph();
+  void setCurrentExpression(std::string expression);
   std::string getCurrentExpression();
   void addPoint(double x, double y);
 
@@ -35,7 +35,6 @@ class Graph : public QWidget {
 
   void updateGraphInformation();
   void updateGraph();
-  std::string expression_;
 
  private:
   double x_start_;
@@ -43,6 +42,8 @@ class Graph : public QWidget {
   double y_start_;
   double y_end_;
   double step_;
+
+  std::string expression_;
 
   Ui::Graph *ui_;
   std::vector<double> x_;

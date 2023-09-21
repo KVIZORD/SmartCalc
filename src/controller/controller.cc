@@ -57,7 +57,7 @@ void Controller::calculateGraphValues() {
   double x_end = view_->graph_.getXEnd();
   double step = view_->graph_.getStep();
 
-  std::string expression = view_->getCurrentExpression().toStdString();
+  std::string expression = view_->graph_.getCurrentExpression();
 
   for (double i = x_start; i <= x_end; i += step) {
     std::unordered_map<std::string, double> var_values = {{"x", i}};

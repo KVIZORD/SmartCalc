@@ -34,6 +34,7 @@ class MainWindow : public QMainWindow {
 
  private:
   void updateHistoryExpressions();
+	void updateGraphExpression();
 
  public:
   static const int kMaxHistorySize = 5;
