@@ -8,11 +8,21 @@ class Credit {
  public:
   enum class RepaymentType { Annuity, Differentiated };
 
+  struct PaymentDetail {
+    int number;
+    double total_payment;
+    double principal_payment;
+    double interest_payment;
+    double remaining_balance;
+  };
+
   Credit(double amount, int term, double rate, RepaymentType type);
   double calculateAnnuityMonthlyPayment() const;
   std::vector<double> calculateDifferentiatedPayments() const;
   double calculateOverpayment() const;
   double calculateTotalPayment() const;
+  std::vector<PaymentDetail> calculatePaymentDetails()
+      const;  // Новый метод для детализированных платежей
 
  private:
   void calculatePayments();

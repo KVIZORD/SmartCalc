@@ -58,3 +58,49 @@ void Credit::calculatePayments() {
     }
   }
 }
+
+std::vector<Credit::PaymentDetail> Credit::calculatePaymentDetails() const {
+  std::vector<PaymentDetail> payment_details;
+
+  if (repayment_type == RepaymentType::Annuity) {
+    double monthly_rate = annual_interest_rate / 12.0;
+    double remaining_balance = loan_amount_;
+
+    for (int i = 0; i < loan_term_months_; ++i) {
+      double interest_payment = remaining_balance * monthly_rate;
+      double principal_payment = payments[0] - interest_payment;
+      remaining_balance -= principal_payment;
+      if (remaining_balance < 0) remaining_balance = 0;
+
+      PaymentDetail detail;
+      detail.number = i + 1;
+      detail.total_payment = payments[0];
+      detail.principal_payment = principal_payment;
+      detail.interest_payment = interest_payment;
+      detail.remaining_balance = remaining_balance;
+
+      payment_details.push_back(detail);
+    }
+  } else if (repayment_type == RepaymentType::Differentiated) {
+    double monthly_interest_rate = annual_interest_rate / 12.0;
+    double remaining_balance = loan_amount_;
+
+    for (int i = 0; i < loan_term_months_; ++i) {
+      double principal_payment = loan_amount_ / loan_term_months_;
+      double interest_payment = remaining_balance * monthly_interest_rate;
+      remaining_balance -= principal_payment;
+      if (remaining_balance < 0) remaining_balance = 0;
+
+      PaymentDetail detail;
+      detail.number = i + 1;
+      detail.total_payment = principal_payment + interest_payment;
+      detail.principal_payment = principal_payment;
+      detail.interest_payment = interest_payment;
+      detail.remaining_balance = remaining_balance;
+
+      payment_details.push_back(detail);
+    }
+  }
+
+  return payment_details;
+}
