@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QPushButton>
 
-#include "../model/calculator.h"
 #include "../view/include/mainwindow.h"
 
 namespace s21 {
@@ -12,15 +11,20 @@ namespace s21 {
 class Controller : public QObject {
   Q_OBJECT
  public:
-  Controller(MainWindow *view, Calculator *calculator);
+  Controller(MainWindow *view);
 
-  public slots:
+ private:
+  void connectGraphElements();
+  void connectMathCalculatorElements();
+  void connectCreditCalculatorElements();
+
+ public slots:
   void calculateGraphValues();
   void calculateMathExpression();
+  void calculateCredit();
 
  private:
   MainWindow *view_;
-  Calculator *calculator_;
 };
 
 }  // namespace s21

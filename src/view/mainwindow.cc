@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
           &MainWindow::addToExpressionFromButton);
   connect(ui_->funcLogButton, &QPushButton::clicked, this,
           &MainWindow::addToExpressionFromButton);
-  connect(ui_->funcModButton, &QPushButton::clicked, this,
+  connect(ui_->modButton, &QPushButton::clicked, this,
           &MainWindow::addToExpressionFromButton);
   connect(ui_->funcSinButton, &QPushButton::clicked, this,
           &MainWindow::addToExpressionFromButton);
@@ -73,10 +73,13 @@ MainWindow::MainWindow(QWidget *parent)
   connect(ui_->removeSymButton, &QPushButton::clicked, this,
           &MainWindow::removeLastSymbolFromCurrentExpression);
 
-	connect(ui_->buildGraphButton, &QPushButton::clicked, this,
+  connect(ui_->buildGraphButton, &QPushButton::clicked, this,
           &MainWindow::updateGraphExpression);
   connect(ui_->buildGraphButton, &QPushButton::clicked, &graph_,
           &Graph::updateGraphInformation);
+
+  connect(ui_->creditCalculatorButton, &QPushButton::clicked, this,
+          &MainWindow::showCreditCalculatorWindow);
 }
 
 QString MainWindow::getCurrentExpression() {
@@ -143,5 +146,7 @@ void MainWindow::showGraphPlotterWindow() {
   graph_.updateGraph();
   graph_.show();
 }
+
+void MainWindow::showCreditCalculatorWindow() { credit_.show(); }
 
 MainWindow::~MainWindow() { delete ui_; }

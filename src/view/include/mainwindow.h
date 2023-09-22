@@ -6,6 +6,7 @@
 #include <list>
 
 #include "graph.h"
+#include "creditcalculator.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,6 +32,7 @@ class MainWindow : public QMainWindow {
   std::list<std::string> getExpressionHistory();
   void addToExpressionHistory(std::string expression);
   void showGraphPlotterWindow();
+  void showCreditCalculatorWindow();
 
  private:
   void updateHistoryExpressions();
@@ -39,6 +41,7 @@ class MainWindow : public QMainWindow {
  public:
   static const int kMaxHistorySize = 5;
   Graph graph_;
+	CreditCalculator credit_;
 
  private:
   std::list<std::string> expressionHistory_;

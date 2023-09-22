@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CreditCalculator</class>
+ <widget class="QWidget" name="CreditCalculator">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>867</width>
+    <height>426</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Credit</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,1,1">
+   <item row="1" column="0">
+    <widget class="QLabel" name="termLabel">
+     <property name="text">
+      <string>Срок кредита (мес)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QGroupBox" name="repaymentType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Тип ежемесячных платежей</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="diffRadio">
+        <property name="text">
+         <string>Дифференцированные</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="annuityRadio">
+        <property name="text">
+         <string>Аннуитетные</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QSpinBox" name="termSpinBox">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>60</number>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QLabel" name="totalPaymentLabel">
+     <property name="text">
+      <string>Общая сумма выплат</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QDoubleSpinBox" name="rateSpinBox">
+     <property name="minimum">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>999.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="3">
+    <widget class="QLineEdit" name="overpaymentLineEdit">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="rateLabel">
+     <property name="text">
+      <string>Процентная ставка</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" rowspan="5" colspan="2">
+    <widget class="QTableView" name="paymentDetailTable">
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QDoubleSpinBox" name="amountdoubleSpin">
+     <property name="minimum">
+      <double>1000.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>10000000.000000000000000</double>
+     </property>
+     <property name="singleStep">
+      <double>1000.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="amountLabel">
+     <property name="text">
+      <string>Сумма кредита (руб)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QLineEdit" name="totalPaymentLineEdit">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3">
+    <widget class="QLabel" name="overpaymentLabel">
+     <property name="text">
+      <string>Переплата</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QPushButton" name="calcucateButton">
+     <property name="text">
+      <string>Рассчитать</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
