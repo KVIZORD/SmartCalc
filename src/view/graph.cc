@@ -64,8 +64,8 @@ void Graph::clearGraph() {
 
 double Graph::getXStart() { return x_start_; }
 double Graph::getXEnd() { return x_end_; }
-double Graph::getyStart() { return y_start_; }
-double Graph::getyEnd() { return y_end_; }
+double Graph::getYStart() { return y_start_; }
+double Graph::getYEnd() { return y_end_; }
 double Graph::getStep() { return step_; }
 
 std::string Graph::getCurrentExpression() { return expression_; }

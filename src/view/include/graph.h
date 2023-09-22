@@ -1,5 +1,5 @@
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef __SMARTCALC_V2_0_SRC_VIEW_GRAPH_H__
+#define __SMARTCALC_V2_0_SRC_VIEW_GRAPH_H__
 
 #include <QDoubleSpinBox>
 #include <QWidget>
@@ -23,8 +23,8 @@ class Graph : public QWidget {
 
   double getXStart();
   double getXEnd();
-  double getyStart();
-  double getyEnd();
+  double getYStart();
+  double getYEnd();
   double getStep();
 
   QDoubleSpinBox *getXStartSpinBox();
@@ -49,4 +49,4 @@ class Graph : public QWidget {
   std::vector<double> x_;
   std::vector<double> y_;
 };
-#endif  // GRAPH_H
+#endif  // __SMARTCALC_V2_0_SRC_VIEW_GRAPH_H__
