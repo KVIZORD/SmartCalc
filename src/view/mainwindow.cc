@@ -2,6 +2,8 @@
 
 #include "ui_mainwindow.h"
 
+namespace s21 {
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui_(new Ui::MainWindow) {
   ui_->setupUi(this);
@@ -85,10 +87,13 @@ MainWindow::MainWindow(QWidget *parent)
 QString MainWindow::getCurrentExpression() {
   return ui_->expressionLineEdit->text();
 }
+
 void MainWindow::setCurrentExpression(QString text) {
   ui_->expressionLineEdit->setText(text);
 }
+
 void MainWindow::clearCurrentExpression() { setCurrentExpression(""); }
+
 void MainWindow::removeLastSymbolFromCurrentExpression() {
   if (!getCurrentExpression().isEmpty()) {
     QString expression = getCurrentExpression().chopped(1);
@@ -150,3 +155,5 @@ void MainWindow::showGraphPlotterWindow() {
 void MainWindow::showCreditCalculatorWindow() { credit_.show(); }
 
 MainWindow::~MainWindow() { delete ui_; }
+
+}  // namespace s21

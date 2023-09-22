@@ -7,10 +7,10 @@
 int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
 
-  MainWindow view;
+  s21::MainWindow main_window;
 
-  s21::Controller controller(&view);
+  s21::Controller controller(&main_window);
 
-  view.show();
+  main_window.show();
   return app.exec();
 }

@@ -9,6 +9,8 @@ namespace Ui {
 class Graph;
 }
 
+namespace s21 {
+
 class Graph : public QWidget {
   Q_OBJECT
 
@@ -49,4 +51,7 @@ class Graph : public QWidget {
   std::vector<double> x_;
   std::vector<double> y_;
 };
+
+}  // namespace s21
+
 #endif  // __SMARTCALC_V2_0_SRC_VIEW_GRAPH_H__

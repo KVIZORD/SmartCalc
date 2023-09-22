@@ -2,7 +2,6 @@
 
 #include <QStandardItemModel>
 #include <cmath>
-#include <iostream>
 
 #include "../model/calculator.h"
 #include "../model/credit.h"

@@ -1,9 +1,10 @@
 #include "include/creditcalculator.h"
 
 #include <QTableView>
-#include <iostream>
 
 #include "ui_creditcalculator.h"
+
+namespace s21 {
 
 CreditCalculator::CreditCalculator(QWidget* parent)
     : QWidget(parent), ui_(new Ui::CreditCalculator) {
@@ -63,3 +64,5 @@ void CreditCalculator::setOverpayment(QString overpayment) {
 void CreditCalculator::setTotalPayment(QString total_payment) {
   ui_->totalPaymentLineEdit->setText(total_payment);
 }
+
+}  // namespace s21

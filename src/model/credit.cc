@@ -1,5 +1,9 @@
 #include "credit.h"
 
+#include <cmath>
+
+namespace s21 {
+
 Credit::Credit(double amount, int term, double rate, RepaymentType type) {
   loan_amount_ = amount;
   loan_term_months_ = term;
@@ -104,3 +108,4 @@ std::vector<Credit::PaymentDetail> Credit::calculatePaymentDetails() const {
 
   return payment_details;
 }
+}  // namespace s21

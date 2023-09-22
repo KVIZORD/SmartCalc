@@ -4,9 +4,6 @@
 #include <cmath>
 #include <locale>
 #include <stack>
-#include <string>
-#include <unordered_set>
-#include <vector>
 
 namespace s21 {
 
@@ -105,7 +102,8 @@ std::vector<Token> Calculator::convertTokensToPolishNotation(
   std::stack<Token> operatorStack;
 
   for (const Token &token : tokens) {
-    if (token.tokenType == TokenType::NUMBER || token.tokenType == TokenType::VARIABLE) {
+    if (token.tokenType == TokenType::NUMBER ||
+        token.tokenType == TokenType::VARIABLE) {
       output.push_back(token);
     } else if (token.tokenType == TokenType::FUNCTION ||
                token.tokenType == TokenType::OPEN_BRACKET) {

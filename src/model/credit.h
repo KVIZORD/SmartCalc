@@ -1,8 +1,9 @@
 #ifndef __SMARTCALC_V2_0_SRC_MODEL_CREDIT_H__
 #define __SMARTCALC_V2_0_SRC_MODEL_CREDIT_H__
 
-#include <cmath>
 #include <vector>
+
+namespace s21 {
 
 class Credit {
  public:
@@ -33,5 +34,7 @@ class Credit {
   RepaymentType repayment_type;
   std::vector<double> payments;
 };
+
+}  // namespace s21
 
 #endif  // __SMARTCALC_V2_0_SRC_MODEL_CREDIT_H__

@@ -5,6 +5,8 @@
 
 #include "ui_graph.h"
 
+namespace s21 {
+
 Graph::Graph(QWidget *parent) : QWidget(parent), ui_(new Ui::Graph) {
   ui_->setupUi(this);
 
@@ -78,3 +80,5 @@ QDoubleSpinBox *Graph::getXEndSpinBox() { return ui_->xEndDoubleSpin; }
 QDoubleSpinBox *Graph::getYStartSpinBox() { return ui_->yStartDoubleSpin; }
 QDoubleSpinBox *Graph::getYEndSpinBox() { return ui_->yEndDoubleSpin; }
 QDoubleSpinBox *Graph::getStepSpinBox() { return ui_->stepDoubleSpin; }
+
+}  // namespace s21
