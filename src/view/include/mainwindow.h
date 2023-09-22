@@ -18,21 +18,27 @@ namespace s21 {
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
+ public:
+  static const int kMaxHistorySize = 5;
 
  public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
   void addToExpressionFromButton();
-  QString getCurrentExpression();
-  void setCurrentExpression(QString text);
+  void addToExpressionHistory(const std::string &expression);
+
+  void setCurrentExpression(const QString &text);
   void clearCurrentExpression();
   void removeLastSymbolFromCurrentExpression();
+
   QPushButton *getCalculateButton();
   QPushButton *getGraphButton();
-  double getVariableXValue();
   std::list<std::string> getExpressionHistory();
-  void addToExpressionHistory(std::string expression);
+  QString getCurrentExpression();
+  double getVariableXValue();
+
+ public slots:
   void showGraphPlotterWindow();
   void showCreditCalculatorWindow();
 
@@ -41,7 +47,6 @@ class MainWindow : public QMainWindow {
   void updateGraphExpression();
 
  public:
-  static const int kMaxHistorySize = 5;
   Graph graph_;
   CreditCalculator credit_;
 

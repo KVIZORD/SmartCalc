@@ -19,7 +19,7 @@ class Graph : public QWidget {
   ~Graph();
 
   void clearGraph();
-  void setCurrentExpression(std::string expression);
+  void setCurrentExpression(const std::string &expression);
   std::string getCurrentExpression();
   void addPoint(double x, double y);
 

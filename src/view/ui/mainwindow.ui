@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Calculator</string>
+   <string>Калькулятор</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
@@ -156,7 +156,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>e</string>
+         <string>E</string>
         </property>
        </widget>
       </item>
@@ -487,7 +487,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Build graph</string>
+         <string>Построить график</string>
         </property>
        </widget>
       </item>
@@ -500,7 +500,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Credit calculator</string>
+         <string>Кредитный калькулятор</string>
         </property>
        </widget>
       </item>

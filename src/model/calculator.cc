@@ -36,7 +36,7 @@ std::vector<Token> Calculator::tokenizeExpression(
         token.clear();
         continue;
       }
-    } else if (token == "e" || token == "E") {  // science notation
+    } else if (token == "e" || token == "E") {
       tokens.push_back(kTokenMap.at("*"));
       tokens.push_back({TokenType::NUMBER, "10", -1});
       tokens.push_back(kTokenMap.at("^"));
@@ -142,7 +142,8 @@ std::vector<Token> Calculator::convertTokensToPolishNotation(
   return output;
 }
 
-double Calculator::execute(std::string oper, double first, double second) {
+double Calculator::execute(const std::string &oper, double first,
+                           double second) {
   if (oper == "+") {
     return second + first;
   } else if (oper == "-") {
@@ -159,7 +160,7 @@ double Calculator::execute(std::string oper, double first, double second) {
   return 0;
 }
 
-double Calculator::execute(std::string func, double value) {
+double Calculator::execute(const std::string &func, double value) {
   if (func == "sin") {
     return sin(value);
   } else if (func == "cos") {
@@ -187,8 +188,8 @@ double Calculator::execute(std::string func, double value) {
 }
 
 double Calculator::calculate(
-    const std::string expression,
-    const std::unordered_map<std::string, double> variable_values) {
+    const std::string &expression,
+    const std::unordered_map<std::string, double> &variable_values) {
   if (expression.empty()) {
     return 0;
   }

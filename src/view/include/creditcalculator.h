@@ -10,29 +10,35 @@ class CreditCalculator;
 }
 
 namespace s21 {
-	
+
 class CreditCalculator : public QWidget {
   Q_OBJECT
 
  public:
   const std::list<std::string> kTitlesTable = {
-      "№", "Сумма платежа", "Платеж по основному долгу", "Платеж по процентам",
-      "Остаток долга"};
+      "№", "Ежемесячный платеж", "Платеж по основному долгу",
+      "Платеж по процентам", "Остаток долга"};
 
+ public:
   explicit CreditCalculator(QWidget *parent = nullptr);
+  ~CreditCalculator();
+
   double getAmount();
   double getTerm();
   double getRate();
   std::string getRepaymentType();
   QPushButton *getCalculateButton();
-  ~CreditCalculator();
-  void updatePaymentDetailTable();
-  void addToTable(int row, int column, QString value);
-  void setOverpayment(QString overpayment);
-  void setTotalPayment(QString total_payment);
+
+  void setOverpayment(const QString &overpayment);
+  void setTotalPayment(const QString &total_payment);
+
+  void updatePaymentTable();
+  void addToTable(int row, int column, const QString &value);
 
  private:
-  void addTableData();
+  void initializeTable();
+
+ private:
   Ui::CreditCalculator *ui_;
   std::unique_ptr<QStandardItemModel> model_;
 };

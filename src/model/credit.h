@@ -17,17 +17,19 @@ class Credit {
     double remaining_balance;
   };
 
+ public:
   Credit(double amount, int term, double rate, RepaymentType type);
-  double calculateAnnuityMonthlyPayment() const;
+
   std::vector<double> calculateDifferentiatedPayments() const;
+  double calculateAnnuityMonthlyPayment() const;
   double calculateOverpayment() const;
   double calculateTotalPayment() const;
-  std::vector<PaymentDetail> calculatePaymentDetails()
-      const;  // Новый метод для детализированных платежей
+  std::vector<PaymentDetail> calculatePaymentDetails() const;
 
  private:
   void calculatePayments();
 
+ private:
   double loan_amount_;
   int loan_term_months_;
   double annual_interest_rate;

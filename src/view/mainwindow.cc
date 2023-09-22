@@ -88,7 +88,7 @@ QString MainWindow::getCurrentExpression() {
   return ui_->expressionLineEdit->text();
 }
 
-void MainWindow::setCurrentExpression(QString text) {
+void MainWindow::setCurrentExpression(const QString &text) {
   ui_->expressionLineEdit->setText(text);
 }
 
@@ -125,7 +125,7 @@ std::list<std::string> MainWindow::getExpressionHistory() {
   return expressionHistory_;
 }
 
-void MainWindow::addToExpressionHistory(std::string expression) {
+void MainWindow::addToExpressionHistory(const std::string &expression) {
   if (expressionHistory_.size() == kMaxHistorySize) {
     expressionHistory_.pop_back();
   }

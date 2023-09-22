@@ -9,9 +9,9 @@ namespace s21 {
 CreditCalculator::CreditCalculator(QWidget* parent)
     : QWidget(parent), ui_(new Ui::CreditCalculator) {
   ui_->setupUi(this);
-  model_ = std::make_unique<QStandardItemModel>(this);
 
-  addTableData();
+  connect(ui_->calcucateButton, &QPushButton::clicked, this,
+          &CreditCalculator::initializeTable);
 }
 
 CreditCalculator::~CreditCalculator() { delete ui_; }
@@ -28,7 +28,9 @@ std::string CreditCalculator::getRepaymentType() {
   }
 }
 
-void CreditCalculator::addTableData() {
+void CreditCalculator::initializeTable() {
+  model_ = std::make_unique<QStandardItemModel>(this);
+
   ui_->paymentDetailTable->horizontalHeader()->setSectionResizeMode(
       QHeaderView::ResizeToContents);
   ui_->paymentDetailTable->horizontalHeader()->setMinimumSectionSize(0);
@@ -40,28 +42,28 @@ void CreditCalculator::addTableData() {
 
   model_->setHorizontalHeaderLabels(horizontal_headers);
 
-  updatePaymentDetailTable();
+  updatePaymentTable();
 }
 
 QPushButton* CreditCalculator::getCalculateButton() {
   return ui_->calcucateButton;
 }
 
-void CreditCalculator::updatePaymentDetailTable() {
+void CreditCalculator::updatePaymentTable() {
   ui_->paymentDetailTable->setModel(model_.get());
 }
 
-void CreditCalculator::addToTable(int row, int column, QString value) {
+void CreditCalculator::addToTable(int row, int column, const QString& value) {
   QStandardItem* interestItem = new QStandardItem(value);
 
   model_->setItem(row, column, interestItem);
 }
 
-void CreditCalculator::setOverpayment(QString overpayment) {
+void CreditCalculator::setOverpayment(const QString& overpayment) {
   ui_->overpaymentLineEdit->setText(overpayment);
 }
 
-void CreditCalculator::setTotalPayment(QString total_payment) {
+void CreditCalculator::setTotalPayment(const QString& total_payment) {
   ui_->totalPaymentLineEdit->setText(total_payment);
 }
 

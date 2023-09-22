@@ -116,7 +116,7 @@ void Controller::calculateCredit() {
 	view_->credit_.setOverpayment(QString::number(credit.calculateOverpayment()));
 	view_->credit_.setTotalPayment(QString::number(credit.calculateTotalPayment()));
 
-	view_->credit_.updatePaymentDetailTable();
+	view_->credit_.updatePaymentTable();
 }
 
 }  // namespace s21

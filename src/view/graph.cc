@@ -71,7 +71,7 @@ double Graph::getYEnd() { return y_end_; }
 double Graph::getStep() { return step_; }
 
 std::string Graph::getCurrentExpression() { return expression_; }
-void Graph::setCurrentExpression(std::string expression) {
+void Graph::setCurrentExpression(const std::string &expression) {
   expression_ = expression;
 }
 

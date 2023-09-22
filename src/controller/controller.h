@@ -13,15 +13,15 @@ class Controller : public QObject {
  public:
   Controller(MainWindow *view);
 
- private:
-  void connectGraphElements();
-  void connectMathCalculatorElements();
-  void connectCreditCalculatorElements();
-
  public slots:
   void calculateGraphValues();
   void calculateMathExpression();
   void calculateCredit();
+
+ private:
+  void connectGraphElements();
+  void connectMathCalculatorElements();
+  void connectCreditCalculatorElements();
 
  private:
   MainWindow *view_;
