@@ -22,14 +22,14 @@ double CreditCalculator::getRate() { return ui_->rateSpinBox->value(); }
 
 std::string CreditCalculator::getRepaymentType() {
   if (ui_->annuityRadio->isChecked()) {
-    return "annuity";
+    return kAnnuityPaymentType;
   } else {
-    return "differentiated";
+    return kDifferentiatedPaymentType;
   }
 }
 
 void CreditCalculator::initializeTable() {
-  model_ = std::make_unique<QStandardItemModel>(this);
+  model_ = std::make_unique<QStandardItemModel>();
 
   ui_->paymentDetailTable->horizontalHeader()->setSectionResizeMode(
       QHeaderView::ResizeToContents);

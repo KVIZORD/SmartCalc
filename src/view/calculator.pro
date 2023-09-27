@@ -11,7 +11,7 @@ CONFIG += c++17
 SOURCES += \
     creditcalculator.cc \
     graph.cc \
-    main.cc \
+    ../main.cc \
     mainwindow.cc \
 		../controller/controller.cc \
 		../model/calculator.cc \

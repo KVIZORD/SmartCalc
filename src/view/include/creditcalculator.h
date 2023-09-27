@@ -19,6 +19,9 @@ class CreditCalculator : public QWidget {
       "№", "Ежемесячный платеж", "Платеж по основному долгу",
       "Платеж по процентам", "Остаток долга"};
 
+  const std::string kAnnuityPaymentType = "annuity";
+  const std::string kDifferentiatedPaymentType = "differentiated";
+
  public:
   explicit CreditCalculator(QWidget *parent = nullptr);
   ~CreditCalculator();

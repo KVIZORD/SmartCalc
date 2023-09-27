@@ -60,17 +60,18 @@ class Calculator {
   };
 
  public:
+  double calculate(const std::string &expression) const;
   double calculate(
       const std::string &expression,
-      const std::unordered_map<std::string, double> &variable_values);
+      const std::unordered_map<std::string, double> &variable_values) const;
 
  private:
-  std::vector<Token> tokenizeExpression(const std::string &expression);
-  void checkTokensValidity(const std::vector<Token> &tokens);
+  std::vector<Token> tokenizeExpression(const std::string &expression) const;
+  void checkTokensValidity(const std::vector<Token> &tokens) const;
   std::vector<Token> convertTokensToPolishNotation(
-      const std::vector<Token> &tokens);
-  double execute(const std::string &oper, double first, double second);
-  double execute(const std::string &func, double value);
+      const std::vector<Token> &tokens) const;
+  double execute(const std::string &oper, double first, double second) const;
+  double execute(const std::string &func, double value) const;
 };
 
 }  // namespace s21

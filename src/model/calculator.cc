@@ -11,7 +11,7 @@ using Token = Calculator::Token;
 using TokenType = Calculator::TokenType;
 
 std::vector<Token> Calculator::tokenizeExpression(
-    const std::string &expression) {
+    const std::string &expression) const {
   std::vector<Token> tokens;
   std::string token;
 
@@ -59,7 +59,7 @@ std::vector<Token> Calculator::tokenizeExpression(
   return tokens;
 }
 
-void Calculator::checkTokensValidity(const std::vector<Token> &tokens) {
+void Calculator::checkTokensValidity(const std::vector<Token> &tokens) const {
   int brackets_counter = 0;
   int operator_counter = 0;
   Token previous_token({TokenType::UNKNOWN, "", -1});
@@ -97,7 +97,7 @@ void Calculator::checkTokensValidity(const std::vector<Token> &tokens) {
 }
 
 std::vector<Token> Calculator::convertTokensToPolishNotation(
-    const std::vector<Token> &tokens) {
+    const std::vector<Token> &tokens) const {
   std::vector<Token> output;
   std::stack<Token> operatorStack;
 
@@ -143,7 +143,7 @@ std::vector<Token> Calculator::convertTokensToPolishNotation(
 }
 
 double Calculator::execute(const std::string &oper, double first,
-                           double second) {
+                           double second) const {
   if (oper == "+") {
     return second + first;
   } else if (oper == "-") {
@@ -160,7 +160,7 @@ double Calculator::execute(const std::string &oper, double first,
   return 0;
 }
 
-double Calculator::execute(const std::string &func, double value) {
+double Calculator::execute(const std::string &func, double value) const {
   if (func == "sin") {
     return sin(value);
   } else if (func == "cos") {
@@ -189,7 +189,7 @@ double Calculator::execute(const std::string &func, double value) {
 
 double Calculator::calculate(
     const std::string &expression,
-    const std::unordered_map<std::string, double> &variable_values) {
+    const std::unordered_map<std::string, double> &variable_values) const {
   if (expression.empty()) {
     return 0;
   }
@@ -238,20 +238,8 @@ double Calculator::calculate(
   return stack.top();
 }
 
+double Calculator::calculate(const std::string &expression) const {
+  return calculate(expression, std::unordered_map<std::string, double>());
+}
+
 }  // namespace s21
-
-// int main() {
-//   using namespace std;
-//   using namespace s21;
-
-//   std::unordered_map<std::string, double> values = {{"x", 5}};
-
-//   Calculator a;
-//   try {
-//     std::cout << a.Calculate("5 3", values);
-//   } catch (const std::invalid_argument e) {
-//     std::cout << "error" << e.what();
-//   }
-
-//   return 0;
-// }

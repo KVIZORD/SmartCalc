@@ -61,7 +61,7 @@ void Controller::calculateMathExpression() {
   view_->clearCurrentExpression();
 
   if (std::isnan(result)) {
-    view_->addToExpressionHistory("Error");
+    view_->addToExpressionHistory(kErrorMessage);
   } else {
     view_->addToExpressionHistory(expression + "=" + std::to_string(result));
   }
@@ -91,7 +91,7 @@ void Controller::calculateCredit() {
   double rate = view_->credit_.getRate();
   Credit::RepaymentType repayment_type;
 
-  if (view_->credit_.getRepaymentType() == "annuity") {
+  if (view_->credit_.getRepaymentType() == view_->credit_.kAnnuityPaymentType) {
     repayment_type = Credit::RepaymentType::Annuity;
   } else {
     repayment_type = Credit::RepaymentType::Differentiated;
@@ -113,10 +113,11 @@ void Controller::calculateCredit() {
     ++row;
   }
 
-	view_->credit_.setOverpayment(QString::number(credit.calculateOverpayment()));
-	view_->credit_.setTotalPayment(QString::number(credit.calculateTotalPayment()));
+  view_->credit_.setOverpayment(QString::number(credit.calculateOverpayment()));
+  view_->credit_.setTotalPayment(
+      QString::number(credit.calculateTotalPayment()));
 
-	view_->credit_.updatePaymentTable();
+  view_->credit_.updatePaymentTable();
 }
 
 }  // namespace s21
