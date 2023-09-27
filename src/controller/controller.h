@@ -11,7 +11,7 @@ namespace s21 {
 class Controller : public QObject {
   Q_OBJECT
  public:
-  const std::string kErrorMessage = "Ошибка вычисления";
+  const std::string kErrorCalculateMessage = "Ошибка вычисления";
 
  public:
   Controller(MainWindow *view);

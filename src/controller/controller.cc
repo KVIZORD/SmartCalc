@@ -61,7 +61,7 @@ void Controller::calculateMathExpression() {
   view_->clearCurrentExpression();
 
   if (std::isnan(result)) {
-    view_->addToExpressionHistory(kErrorMessage);
+    view_->addToExpressionHistory(kErrorCalculateMessage);
   } else {
     view_->addToExpressionHistory(expression + "=" + std::to_string(result));
   }
@@ -78,8 +78,12 @@ void Controller::calculateGraphValues() {
   std::string expression = view_->graph_.getCurrentExpression();
 
   for (double i = x_start; i <= x_end; i += step) {
-    std::unordered_map<std::string, double> var_values = {{"x", i}};
-    view_->graph_.addPoint(i, calculator.calculate(expression, var_values));
+    try {
+      std::unordered_map<std::string, double> var_values = {{"x", i}};
+      view_->graph_.addPoint(i, calculator.calculate(expression, var_values));
+    } catch (const std::invalid_argument& e) {
+      continue;
+    }
   }
 
   view_->showGraphPlotterWindow();
