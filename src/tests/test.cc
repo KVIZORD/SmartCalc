@@ -119,10 +119,11 @@ TEST(MathCalculator, ScientificNotation) {
 TEST(MathCalculator, InvalidExpressions) {
   ASSERT_THROW(calculator.calculate("(2 + 3"), std::invalid_argument);
   ASSERT_THROW(calculator.calculate("2 + 3)"), std::invalid_argument);
-  // ASSERT_THROW(calculator.calculate("sin()"),
-  //              std::invalid_argument);
-  // ASSERT_THROW(calculator.calculate("abc + 2"),
-  //  std::invalid_argument);
+  ASSERT_THROW(calculator.calculate("sin()"), std::invalid_argument);
+  ASSERT_THROW(calculator.calculate("()"), std::invalid_argument);
+  ASSERT_THROW(calculator.calculate("() + ()"), std::invalid_argument);
+  ASSERT_THROW(calculator.calculate("sin"), std::invalid_argument);
+  ASSERT_THROW(calculator.calculate("1 / 0"), std::invalid_argument);
 }
 
 TEST(CreditCalculator, AnnuityPayment) {

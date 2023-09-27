@@ -151,13 +151,23 @@ double Calculator::execute(const std::string &oper, double first,
   } else if (oper == "*") {
     return second * first;
   } else if (oper == "/") {
+    if (first == 0) {
+      throw std::invalid_argument("Division by zero");
+    }
     return second / first;
   } else if (oper == "^") {
+    if (second < 0 && first != floor(first)) {
+      throw std::invalid_argument(
+          "Negative number raised to a non-integer power");
+    }
     return powf(second, first);
   } else if (oper == "mod") {
+    if (first == 0) {
+      throw std::invalid_argument("Modulo division by zero");
+    }
     return fmod(second, first);
   }
-  return 0;
+  throw std::invalid_argument("Invalid operator: " + oper);
 }
 
 double Calculator::execute(const std::string &func, double value) const {
@@ -168,23 +178,38 @@ double Calculator::execute(const std::string &func, double value) const {
   } else if (func == "tan") {
     return tan(value);
   } else if (func == "acos") {
+    if (value < -1 || value > 1) {
+      throw std::invalid_argument("Invalid input for acos");
+    }
     return acos(value);
   } else if (func == "asin") {
+    if (value < -1 || value > 1) {
+      throw std::invalid_argument("Invalid input for asin");
+    }
     return asin(value);
   } else if (func == "atan") {
     return atan(value);
   } else if (func == "sqrt") {
+    if (value < 0) {
+      throw std::invalid_argument("Square root of a negative number");
+    }
     return sqrt(value);
   } else if (func == "ln") {
+    if (value <= 0) {
+      throw std::invalid_argument("Natural logarithm of a non-positive number");
+    }
     return log(value);
   } else if (func == "log") {
+    if (value <= 0) {
+      throw std::invalid_argument("Logarithm of a non-positive number");
+    }
     return log10(value);
   } else if (func == kUnaryOperatorFlag + "+") {
     return value;
   } else if (func == kUnaryOperatorFlag + "-") {
     return -value;
   }
-  return 0;
+  throw std::invalid_argument("Invalid function: " + func);
 }
 
 double Calculator::calculate(
@@ -194,7 +219,7 @@ double Calculator::calculate(
     return 0;
   }
   if (expression.length() > kMaxExpressionLength) {
-    throw std::invalid_argument("expression length more then 255");
+    throw std::invalid_argument("expression length more than 255");
   }
 
   std::vector<Token> tokens = tokenizeExpression(expression);
@@ -213,12 +238,21 @@ double Calculator::calculate(
       double first, second, res;
 
       if (token.content[0] == kUnaryOperatorFlag[0]) {
+        if (stack.size() < 1) {
+          throw std::invalid_argument("Not enough operands for unary operator");
+        }
+
         first = stack.top();
         stack.pop();
 
         res = execute(token.content, first);
         stack.push(res);
       } else {
+        if (stack.size() < 2) {
+          throw std::invalid_argument(
+              "Not enough operands for binary operator");
+        }
+
         first = stack.top();
         stack.pop();
         second = stack.top();
@@ -228,11 +262,19 @@ double Calculator::calculate(
         stack.push(res);
       }
     } else if (token.tokenType == TokenType::FUNCTION) {
+      if (stack.empty()) {
+        throw std::invalid_argument("Not enough operands for function");
+      }
+
       double value = stack.top();
       double res = execute(token.content, value);
       stack.pop();
       stack.push(res);
     }
+  }
+
+  if (stack.size() != 1) {
+    throw std::invalid_argument("Invalid expression: unexpected stack size");
   }
 
   return stack.top();
