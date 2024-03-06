@@ -1,10 +1,10 @@
-#include "controller.h"
+#include "controller/controller.h"
 
 #include <QStandardItemModel>
 #include <cmath>
 
-#include "../model/calculator.h"
-#include "../model/credit.h"
+#include "model/calculator.h"
+#include "model/credit.h"
 
 namespace s21 {
 

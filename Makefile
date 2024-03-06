@@ -1,54 +1,43 @@
+PROJECT_NAME = SmartCalc
 BUILD_DIR = build
-VIEW_DIR = view
-MODEL_DIR = model
-CALCULATOR_EXE = calculator
-TEST_DIR = tests
-TEST_EXE = test
-TEST_SRC = test.cc
-CXX = g++
-CFLAGS = -Werror -Wextra -Wall
-LIBS =
+
 OS = $(shell uname -s)
 MACOS = Darwin
 
 ifeq ($(OS), $(MACOS))
-CALCULATOR_EXE = calculator.app
+MEMORY_TEST = leaks -atExit --
+else 
+MEMORY_TEST = valgrind --trace-children=yes --leak-check=yes --track-origins=yes
 endif
 
-.PHONY: all install dvi uninstall gcov_report test clean valgrind autoformat dist
 
 all: install
 
-install:
-	mkdir -p $(BUILD_DIR)
-	cd $(VIEW_DIR) && qmake && make
-	mv $(VIEW_DIR)/$(CALCULATOR_EXE) $(BUILD_DIR)
+install: build
+	cmake --build $(BUILD_DIR) --target $(PROJECT_NAME)
+	$(BUILD_DIR)/src/$(PROJECT_NAME)
 
-uninstall: clean
+uninstall:
 	rm -rf $(BUILD_DIR)
 
-calculator.o:
-	$(CXX) $(CFLAGS) -c $(MODEL_DIR)/calculator.cc -o $(TEST_DIR)/calculator.o
+build:
+	cmake -B $(BUILD_DIR)
 
-credit.o:
-	$(CXX) $(CFLAGS) -c $(MODEL_DIR)/credit.cc -o $(TEST_DIR)/credit.o
+clean:
+	rm -rf $(PROJECT_NAME).tar
 
-tests: calculator.o credit.o
-	cd $(TEST_DIR) && $(CXX) $(CFLAGS) $(TEST_SRC) credit.o calculator.o -lgtest -o $(TEST_EXE)
-	$(TEST_DIR)/$(TEST_EXE)
+tests: build
+	cmake --build $(BUILD_DIR) --target MazeTests
+	$(BUILD_DIR)/tests/MazeTests
 
-clean_tests:
-	rm -rf $(TEST_DIR)/*.o $(TEST_DIR)/$(TEST_EXE)
+leaks: tests
+	$(MEMORY_TEST) $(BUILD_DIR)/tests/MazeTests --gtest_filter=-*.Throw*
 
-clean: clean_tests
-	cd $(VIEW_DIR) && qmake && make clean
-	rm -rf $(VIEW_DIR)/.qmake.stash $(VIEW_DIR)/Makefile
-	
-autoformat:
-	find . -type f -name "*.cc" -o -name "*.h" | xargs clang-format -style=Google -i
+stylecheck: build
+	cmake --build $(BUILD_DIR) --target stylecheck
 
-dist:
-	mkdir -p source
-	cp -r Makefile view model controller tests dvi.md main.cc source
-	tar -cf source.tar source
-	rm -rf source
+cppcheck: build
+	cmake --build $(BUILD_DIR) --target cppcheck
+
+format: build
+	cmake --build $(BUILD_DIR) --target format

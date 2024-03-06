@@ -1,5 +1,5 @@
 
-#include "include/graph.h"
+#include "view/graph.h"
 
 #include <QDoubleSpinBox>
 

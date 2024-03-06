@@ -1,4 +1,4 @@
-#include "include/creditcalculator.h"
+#include "view/creditcalculator.h"
 
 #include <QTableView>
 

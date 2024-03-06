@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 
-#include "../view/include/mainwindow.h"
+#include "view/mainwindow.h"
 
 namespace s21 {
 
@@ -14,7 +14,7 @@ class Controller : public QObject {
   const std::string kErrorCalculateMessage = "Ошибка вычисления";
 
  public:
-  Controller(MainWindow *view);
+  explicit Controller(MainWindow *view);
 
  public slots:
   void calculateGraphValues();

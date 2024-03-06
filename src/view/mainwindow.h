@@ -5,8 +5,8 @@
 #include <QPushButton>
 #include <list>
 
-#include "creditcalculator.h"
-#include "graph.h"
+#include "view/creditcalculator.h"
+#include "view/graph.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
