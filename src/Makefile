@@ -19,9 +19,6 @@ endif
 
 all: install
 
-dvi:
-	open dvi.md
-
 install:
 	mkdir -p $(BUILD_DIR)
 	cd $(VIEW_DIR) && qmake && make
