@@ -2,8 +2,8 @@
 
 #include <cmath>
 
-#include "../model/calculator.h"
-#include "../model/credit.h"
+#include "model/calculator.h"
+#include "model/credit.h"
 
 s21::Calculator calculator;
 const double kEpsilon = 1e-6;

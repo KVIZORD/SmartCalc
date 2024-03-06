@@ -1,4 +1,5 @@
 PROJECT_NAME = SmartCalc
+TEST_NAME = SmartCalcTests
 BUILD_DIR = build
 
 OS = $(shell uname -s)
@@ -27,11 +28,11 @@ clean:
 	rm -rf $(PROJECT_NAME).tar
 
 tests: build
-	cmake --build $(BUILD_DIR) --target MazeTests
-	$(BUILD_DIR)/tests/MazeTests
+	cmake --build $(BUILD_DIR) --target $(TEST_NAME)
+	$(BUILD_DIR)/tests/$(TEST_NAME)
 
 leaks: tests
-	$(MEMORY_TEST) $(BUILD_DIR)/tests/MazeTests --gtest_filter=-*.Throw*
+	$(MEMORY_TEST) $(BUILD_DIR)/tests/$(TEST_NAME) --gtest_filter=-*.Throw*
 
 stylecheck: build
 	cmake --build $(BUILD_DIR) --target stylecheck
